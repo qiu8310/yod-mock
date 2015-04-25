@@ -1,0 +1,42 @@
+{
+  "name": "yod-mock",
+  "version": "0.0.0",
+  "homepage": "https://github.com/qiu8310/yod-mock",
+  "authors": {
+    "name": "Zhonglei Qiu",
+    "email": "qiuzhongleiabc@126.com"
+  },
+  "description": "Mock data for develop environment.",
+  "main": "browser/yod-mock.js",
+  "moduleType": [
+    "globals"
+  ],
+  "keywords": [
+    "yod-mock",
+    "mock",
+    "yod",
+    "env",
+    "environment",
+    "develop",
+    "development",
+    "test",
+    "test-data",
+    "data"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "*.sh",
+    "gulpfile.js",
+    "node_modules",
+    "bower_components",
+    "test",
+    "example",
+    "jsdoc.json",
+    "src",
+    "docs",
+    "coverage",
+    "gh-pages",
+    "tests"
+  ]
+}

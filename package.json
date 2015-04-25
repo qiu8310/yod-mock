@@ -1,0 +1,57 @@
+{
+  "name": "yod-mock",
+  "description": "Mock data for develop environment.",
+  "version": "0.0.0",
+  "homepage": "https://github.com/qiu8310/yod-mock",
+  "bugs": "https://github.com/qiu8310/yod-mock/issues",
+  "license": "MIT",
+  "main": "src/yod-mock.js",
+  "author": {
+    "name": "Zhonglei Qiu",
+    "email": "qiuzhongleiabc@126.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/qiu8310/yod-mock"
+  },
+  "keywords": [
+    "yod-mock",
+    "mock",
+    "yod",
+    "env",
+    "environment",
+    "develop",
+    "development",
+    "test",
+    "test-data",
+    "data"
+  ],
+  "dependencies": {
+    "elegant.def": "^1.2.0",
+    "lodash": "^3.7.0",
+    "moment": "^2.10.2",
+    "sprintf-js": "^1.0.2",
+    "yod": "^0.1.1"
+  },
+  "devDependencies": {
+    "coveralls": "^2.11.1",
+    "fisher": "^0.2.0",
+    "fs-extra": "^0.18.2",
+    "gulp": "^3.8.8",
+    "gulp-istanbul": "^0.8.1",
+    "gulp-jscs": "^1.6.0",
+    "gulp-jshint": "^1.9.4",
+    "gulp-load-plugins": "^0.10.0",
+    "gulp-mocha": "^2.0.0",
+    "gulp-plumber": "^1.0.0",
+    "jsdoc": "^3.3.0-beta3",
+    "jshint-stylish": "^1.0.1",
+    "should": "^6.0.1",
+    "webpack": "^1.8.9"
+  },
+  "scripts": {
+    "docs": "rm -rf docs && ./node_modules/.bin/jsdoc -c ./jsdoc.json ./README.md && echo 'code{padding: 2px 4px;font-size: 90%;color:#c7254e;background-color:#f9f2f4;border-radius:4px;}' >> ./docs/styles/jsdoc-default.css",
+    "coveralls": "gulp test && cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
+    "test": "gulp test"
+  }
+}
