@@ -1,7 +1,7 @@
 {
   "name": "yod-mock",
   "description": "Powerful data generator tool.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "homepage": "https://github.com/qiu8310/yod-mock",
   "bugs": "https://github.com/qiu8310/yod-mock/issues",
   "license": "MIT",
@@ -31,7 +31,7 @@
   ],
   "dependencies": {
     "copy-paste": "^1.1.0",
-    "elegant.def": "^1.2.0",
+    "elegant.def": "^2.0.0",
     "moment": "^2.10.2",
     "yod": "^1.0.0-alpha.1"
   },
