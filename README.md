@@ -254,6 +254,10 @@ __另外，modifier 中加了入 [lodash](https://lodash.com/docs) 的所有功�
 * [elegant.def](http://github.com/qiu8310/elegant.def)：优雅的定义 JS 函数，很多情况下我们定义了函数要处理参数的各种情况，用了它处理函数参数就非常简单了（我写的）。
 
 
+## TODO
+
+- 服务器版本，可以使用用户直接访问线上的 URL 就可以生成数据，而不用用户自己搭建一个服务器
+- 语法更宽松，不需要写全 type 或 modifier 就能找到对应的值（支持配置）
 
 
 ## License
