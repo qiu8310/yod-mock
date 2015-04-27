@@ -61,12 +61,12 @@ __有太多 types 了，我不想一个个写它的参数，其实用户都很�
 #### 只想在最上面特别说明下 `Data` 类型：
 
 <table>
-<tr>`@Date()`<td></td><td>过去10年的随机 timestamp</td></tr>
-<tr>`@Date(0)`<td></td><td>过去10年到未来10年之间的一个 timestamp</td></tr>
-<tr>`@Date(-2)`<td></td><td>过去两年的随机 timestamp</td></tr>
-<tr>`@Date(3)`<td></td><td>将来三年的随机 timestamp</td></tr>
-<tr>`@Date(-1, 3600)`<td></td><td>过去 3600 分（即过去一小时）间的随机 timestamp</td></tr>
-<tr>`@Date("2011-1-1", "2011-12-31 23:59:59")`<td></td><td>2011-1-1 00:00:00 到 2011-12-31 23:59:59 之间的随机数据</td></tr>
+<tr><td>`@Date()`</td><td>过去10年的随机 timestamp</td></tr>
+<tr><td>`@Date(0)`</td><td>过去10年到未来10年之间的一个 timestamp</td></tr>
+<tr><td>`@Date(-2)`</td><td>过去两年的随机 timestamp</td></tr>
+<tr><td>`@Date(3)`</td><td>将来三年的随机 timestamp</td></tr>
+<tr><td>`@Date(-1, 3600)`</td><td>过去 3600 分（即过去一小时）间的随机 timestamp</td></tr>
+<tr><td>`@Date("2011-1-1", "2011-12-31 23:59:59")`</td><td>2011-1-1 00:00:00 到 2011-12-31 23:59:59 之间的随机数据</td></tr>
 </table>
 
 __上面所有生成的都是 10 位的 Unix 时间戳，这是我们在接口中常用的格式，如果你想输出其它格式，
@@ -76,7 +76,7 @@ __上面所有生成的都是 10 位的 Unix 时间戳，这是我们在接口�
 @Date('YYYY-MM-DD HH:mm:ss', -2); // 将生成一个像 "2014-05-12 21:04:19" 一样的字符串
 ```
 
-#### BASIC
+#### [BASIC](https://github.com/qiu8310/yod-mock/blob/master/src/mocks/basic.js)
 
 * Boolean & Bool
 * Double & Float
@@ -91,7 +91,7 @@ __上面所有生成的都是 10 位的 Unix 时间戳，这是我们在接口�
 * Objectid & Oid
 * Md5 & MD5 
 
-#### TEXT
+#### [TEXT](https://github.com/qiu8310/yod-mock/blob/master/src/mocks/text.js)
 
 * Word & EW
 * Sentence & ES
@@ -102,13 +102,13 @@ __上面所有生成的都是 10 位的 Unix 时间戳，这是我们在接口�
 * Good
 * Face
 
-#### MEDIA
+#### [MEDIA](https://github.com/qiu8310/yod-mock/blob/master/src/mocks/media.js)
 
 * Picture & Pic & Image & Img
 * Audio & Mp3
 * Video & Mp4
 
-#### USER
+#### [USER](https://github.com/qiu8310/yod-mock/blob/master/src/mocks/user.js)
 
 * Gender & Sex
 * Age
@@ -121,7 +121,7 @@ __上面所有生成的都是 10 位的 Unix 时间戳，这是我们在接口�
 * Comment
 * Telephone & Tel
 
-#### WEB
+#### [WEB](https://github.com/qiu8310/yod-mock/blob/master/src/mocks/web.js)
 
 * Color
 * Domain
@@ -130,7 +130,7 @@ __上面所有生成的都是 10 位的 Unix 时间戳，这是我们在接口�
 * Ipv6 & IPv6 & IPV6
 
 
-#### LOCATION
+#### [LOCATION](https://github.com/qiu8310/yod-mock/blob/master/src/mocks/location.js)
 
 * Country
 * Province & Region
@@ -194,11 +194,12 @@ __另外，modifier 中加了入 [lodash](https://lodash.com/docs) 的所有功�
 
 ## 引用
 
-* 本项目的核心引擎：[yod][yod]（我写的），不解析，自己去官网看。
-* 字符串分析器：[sscan](http://github.com/qiu8310/sscan)（我写的），很多复杂的解析用正则表达式是满足不了要求的，所以需要把字符串化分成字符来一个个解析。
-* 优雅的定义 JS 函数：[elegant.def](http://github.com/qiu8310/elegant.def)（我写的），很多情况下我们定义了函数要处理参数的各种情况，用了它处理函数参数就非常简单了。
+* [yod][yod]：本项目的核心引擎（我写的）。
 * [mockjs](http://mockjs.com/#)：阿里出的，也不错，但学习成功较高，也不够强大。
 * [chance](http://chancejs.com/)：国外的一个 mock 库，代码很简洁，但不适合中国人用。
+* [sscan](http://github.com/qiu8310/sscan)：字符串分析器，很多复杂的解析用正则表达式是满足不了要求的，所以需要把字符串化分成字符来一个个解析（我写的）。
+* [elegant.def](http://github.com/qiu8310/elegant.def)：优雅的定义 JS 函数，很多情况下我们定义了函数要处理参数的各种情况，用了它处理函数参数就非常简单了（我写的）。
+
 
 
 

@@ -20,11 +20,16 @@ if (!str) {
   console.log('\r\n  yod [-c] generator\r\n\r\n');
 } else {
   str = str.replace(/^@/, '');
-  str = yod('@' + yod._.capitalize(str));
 
-  console.log();
-  console.log(str);
-  console.log();
+  try {
+    str = yod('@' + yod._.capitalize(str));
 
-  if (copy) { cp.copy(str); }
+    console.log();
+    console.log(str);
+    console.log();
+
+    if (copy) { cp.copy(str); }
+  } catch (e) {
+    console.log('\nError: ' + e.message + '\n');
+  }
 }

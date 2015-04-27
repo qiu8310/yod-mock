@@ -1,11 +1,14 @@
 {
   "name": "yod-mock",
   "description": "Powerful data generator tool.",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "homepage": "https://github.com/qiu8310/yod-mock",
   "bugs": "https://github.com/qiu8310/yod-mock/issues",
   "license": "MIT",
   "main": "src/yod-mock.js",
+  "bin": {
+    "yod": "cli.js"
+  },
   "author": {
     "name": "Zhonglei Qiu",
     "email": "qiuzhongleiabc@126.com"
