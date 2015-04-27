@@ -1,28 +1,21 @@
 # yod-mock
 [![NPM version](https://badge.fury.io/js/yod-mock.svg)](https://npmjs.org/package/yod-mock)
 [![GitHub version][git-tag-image]][project-url]
+
+<!--
 [![Build Status][travis-image]][travis-url]
 [![Dependency Status][daviddm-url]][daviddm-image]
 [![Inline docs][doc-image]][doc-url]
 [![Code Climate][climate-image]][climate-url]
 [![Coverage Status][coveralls-image]][coveralls-url]
+-->
+
+Powerful data generator tool.
 
 
-Mock data for develop environment.
-
-
-[Github Repo][project-url]
-
-[JSDOC Generated Document](http://qiu8310.github.io/yod-mock)
-
-
+<!--
 
 // http://www.cnblogs.com/top5/archive/2011/11/08/2241349.html 全国邮编及区号
-
-// IP
-
-// 电话号码
-
 
 Random.image()
 // => "http://dummyimage.com/125x125"
@@ -37,6 +30,7 @@ Random.image('200x100', '#00405d', '#FFF', 'Mock.js')
 Random.image('200x100', '#ffcc33', '#FFF', 'png', '!')
 // => "http://dummyimage.com/200x100/ffcc33/FFF.png&text=!"
 
+-->
 
 ## Install
 
@@ -46,6 +40,7 @@ Random.image('200x100', '#ffcc33', '#FFF', 'png', '!')
 ```bash
 npm install --save yod-mock
 ```
+__如果全局安装，可以使用 `yod` 命令，在命令行上输出 mock 的数据，使用 `yod -c xxx` 可以复制生成的内容__
 
 ### Browser
 
@@ -53,40 +48,158 @@ npm install --save yod-mock
 bower install --save yod-mock
 ```
 
-
-
 ## Usage
 
+此项目只是在 [yod][yod] 项目基础上定义了一些常用的 type 和 modifier。（type 和 modifier 的细节可以在 [yod][yod] 项目中查看）
+
+### Types
+
+__有太多 types 了，我不想一个个写它的参数，其实用户都很简单；
+我下面只写出支持的 types 名称，具体支持哪些参数可以去看[源代码](https://github.com/qiu8310/yod-mock/tree/master/src/mocks)__
+
+
+#### 只想在最上面特别说明下 `Data` 类型：
+
+<table>
+<tr>`@Date()`<td></td><td>过去10年的随机 timestamp</td></tr>
+<tr>`@Date(0)`<td></td><td>过去10年到未来10年之间的一个 timestamp</td></tr>
+<tr>`@Date(-2)`<td></td><td>过去两年的随机 timestamp</td></tr>
+<tr>`@Date(3)`<td></td><td>将来三年的随机 timestamp</td></tr>
+<tr>`@Date(-1, 3600)`<td></td><td>过去 3600 分（即过去一小时）间的随机 timestamp</td></tr>
+<tr>`@Date("2011-1-1", "2011-12-31 23:59:59")`<td></td><td>2011-1-1 00:00:00 到 2011-12-31 23:59:59 之间的随机数据</td></tr>
+</table>
+
+__上面所有生成的都是 10 位的 Unix 时间戳，这是我们在接口中常用的格式，如果你想输出其它格式，
+可以在 `Data` 的第一个参数上加上格式字符串，所有支持的格式在这：[moment#format](http://momentjs.com/docs/#/displaying/format/)__
+
 ```javascript
-var yodMock = require('yod-mock');
-yodMock(); // "awesome"
+@Date('YYYY-MM-DD HH:mm:ss', -2); // 将生成一个像 "2014-05-12 21:04:19" 一样的字符串
 ```
 
-## API
+#### BASIC
 
-_(Coming soon)_
+* Boolean & Bool
+* Double & Float
+* Integer & Int
+* Number
+* Character & Char
+* String & Str
+* Date
+* Range
+* Sequence & Seq & Id 
+* Guid & GUID & Uuid & UUID
+* Objectid & Oid
+* Md5 & MD5 
+
+#### TEXT
+
+* Word & EW
+* Sentence & ES
+* Paragraph & EP
+* CW
+* CS
+* CP
+* Good
+* Face
+
+#### MEDIA
+
+* Picture & Pic & Image & Img
+* Audio & Mp3
+* Video & Mp4
+
+#### USER
+
+* Gender & Sex
+* Age
+* Avatar
+* First & FirstName
+* Last & LastName 
+* UserName
+* Name & ChineseName
+* Nick & NickName
+* Comment
+* Telephone & Tel
+
+#### WEB
+
+* Color
+* Domain
+* Email
+* Ip & IP
+* Ipv6 & IPv6 & IPV6
 
 
-## Contributing
+#### LOCATION
 
-In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [gulp](http://gulpjs.com/).
+* Country
+* Province & Region
+* Area
+* Latitude
+* Longitude
+* Coordinates
+
+__另外还一个特殊的 Type：`Lodash`，别名 `_`，可以这么用它：__
+
+```javascript
+yod('_([a, b, c]).sample'); // 从数组 ['a', 'b', 'c'] 中随机取出一个值来
+```
 
 
-## Reference
-* [CI Test for Browser](https://ci.testling.com/) - Run your browser tests on every push, demo project [js-traverse](https://github.com/substack/js-traverse)
-* [GA on Github](https://github.com/igrigorik/ga-beacon) - Google Analytics collector-as-a-service (using GA measurement protocol).
-* [idiomatic.js](https://github.com/rwaldron/idiomatic.js) - Principles of Writing Consistent, Idiomatic JavaScript
-* [Use jsdoc](http://usejsdoc.org/index.html)
-* [Using the ES6 transpiler Babel on Node.js](http://www.2ality.com/2015/03/babel-on-node.html)
-* [Node Collection](https://github.com/npm/newww/issues/313)
-  - [http://tools.ampersandjs.com/](http://tools.ampersandjs.com/)
-  - [https://github.com/sindresorhus/awesome-nodejs](https://github.com/sindresorhus/awesome-nodejs)
-  - [https://www.npmjs.com/package/frontend-npm-goodies](https://www.npmjs.com/package/frontend-npm-goodies)
-  - [https://github.com/Raynos/http-framework/wiki/Modules#response](https://github.com/Raynos/http-framework/wiki/Modules#response)
-  - [https://github.com/npm-dom](https://github.com/npm-dom)
-  - [https://www.npmjs.com/package/mad-science-modules](https://www.npmjs.com/package/mad-science-modules)
-  - [https://www.npmjs.com/package/npm-collection-language-tools#readme](https://www.npmjs.com/package/npm-collection-language-tools#readme)
-  - And more...
+__所有 Types 都是大小写敏感的，而且首字母都是大小，下一个版本打算做成不敏感，并且可以不用写全名称__
+
+### Modifiers
+
+#### repeat([[min,] max] [, join])
+
+重复生成 min - max 之间某个长度的数据，min 默认值是 1， max 默认值是 10 。
+
+如果指定了 join，会将重复生成的数据用 join 指定的字符合并起来。
+
+__e.g__
+
+```javascript
+yod('@Bool.repeat(2)')    // => 可能生成 [true, false]
+  
+yod('@Int.repeat(3, "-")  // => 可能生成 "20-3-12"
+```
+
+#### index(n)
+
+取字符串或数组的第 n 个元素。
+
+#### stringify
+
+调用 JSON.stringify 生成字符串。
+
+#### title
+
+只适用于字符串，将字符串中每个单词的首字母大写。
+
+#### cap
+
+只适用于字符串，将字符串中第一个字母大写。
+
+#### lower
+
+只适用于字符串，将字符串中每个字母小写。
+
+#### upper
+
+只适用于字符串，将字符串中每个字母大写。
+
+__另外，modifier 中加了入 [lodash](https://lodash.com/docs) 的所有功能（除了 repeat，因为我重写了它的 repeat）__
+
+
+
+## 引用
+
+* 本项目的核心引擎：[yod][yod]（我写的），不解析，自己去官网看。
+* 字符串分析器：[sscan](http://github.com/qiu8310/sscan)（我写的），很多复杂的解析用正则表达式是满足不了要求的，所以需要把字符串化分成字符来一个个解析。
+* 优雅的定义 JS 函数：[elegant.def](http://github.com/qiu8310/elegant.def)（我写的），很多情况下我们定义了函数要处理参数的各种情况，用了它处理函数参数就非常简单了。
+* [mockjs](http://mockjs.com/#)：阿里出的，也不错，但学习成功较高，也不够强大。
+* [chance](http://chancejs.com/)：国外的一个 mock 库，代码很简洁，但不适合中国人用。
+
 
 
 ## License
@@ -98,6 +211,7 @@ Copyright (c) 2015 Zhonglei Qiu. Licensed under the MIT license.
 [doc-url]: http://inch-ci.org/github/qiu8310/yod-mock
 [doc-image]: http://inch-ci.org/github/qiu8310/yod-mock.svg?branch=master
 [project-url]: https://github.com/qiu8310/yod-mock
+[yod]: https://github.com/qiu8310/yod
 [git-tag-image]: http://img.shields.io/github/tag/qiu8310/yod-mock.svg
 [climate-url]: https://codeclimate.com/github/qiu8310/yod-mock
 [climate-image]: https://codeclimate.com/github/qiu8310/yod-mock/badges/gpa.svg

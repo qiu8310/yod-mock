@@ -6,7 +6,7 @@
     "name": "Zhonglei Qiu",
     "email": "qiuzhongleiabc@126.com"
   },
-  "description": "Mock data for develop environment.",
+  "description": "Powerful data generator tool.",
   "main": "browser/yod-mock.js",
   "moduleType": [
     "globals"
