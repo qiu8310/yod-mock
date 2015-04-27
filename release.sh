@@ -40,8 +40,6 @@ if test $# -gt 0; then
   fi
   git-changelog -t $1 \
     && git-release $1 \
-    && echo 'publish docs to gh-pages branch' \
-    && sh './publish_docs.sh' \
     && echo 'npm publish ... ' \
     && npm publish -d
 else

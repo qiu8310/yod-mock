@@ -10,7 +10,17 @@
 [![Coverage Status][coveralls-image]][coveralls-url]
 -->
 
-Powerful data generator tool.
+本项目主要用来在测试环境中生成测试数据用的，另外也可以在命令行上快速生成简单测试数据。
+
+主要特点：
+
+* 语法简洁，学习成本低，功能强大
+* 支持所有 JS 原生的函数
+* 支持所有 [lodash](https://lodash.com/docs) 的函数
+* 支持处定义新的 type 和 modifier
+* 支持配置系统现有的数据（使用 `yod.config('system.xxx', ...)`）
+
+[在线体验本项目的功能](http://qiu8310.github.io/yod-mock/)
 
 
 <!--
@@ -52,21 +62,63 @@ bower install --save yod-mock
 
 此项目只是在 [yod][yod] 项目基础上定义了一些常用的 type 和 modifier。（type 和 modifier 的细节可以在 [yod][yod] 项目中查看）
 
+```javascript
+
+/*
+
+三个系统自带的功能：
+
+@Self: 是取当前对象
+@Parent: 是取当前对象的父对象
+@Config: 取当前系统的配置项目
+
+注意：数组不算是对象，只有 JS 中的 {...} 才算是对象
+
+其它以 @ 开头的关键字都是已经定义好的类型，
+如 @Nick 是随机生成一个昵称，@Mp3 是随机生成一个 mp3 文件的链接
+*/
+
+// 定义一个用户类型
+yod.type('User', {
+  firstName: '@First',
+  lastName: '@Last',
+  sex: '@Sex',
+  fullName: '@Self.firstName @Self.lastName',
+  nickName: '@Nick',
+  chineseName: '@ChineseName',
+  age: '@Age(adult)',
+  to100: '` 100 - @Self.age `',
+  telephone: '@Tel',
+  avatar: '@Avatar',
+  others: {
+     words: 'Hello, my name is @Parent.fullName, you can call me @Parent.nickName.',
+     bestFriends: '@Nick.repeat(2, 3).join(", ")',
+     myFirstNameLength: '@Parent.firstName.length',
+     favouriteLetter: '@([A, B, C]).sample'
+  }
+});
+
+// 用上面的 User 结构体 重复生成 2 - 4 个 User
+console.log(yod('@User.repeat(2, 4)'));
+
+```
+
+
 ### Types
 
-__有太多 types 了，我不想一个个写它的参数，其实用户都很简单；
+__有太多 types 了，我不想一个个写它的参数，其实用法都很简单；
 我下面只写出支持的 types 名称，具体支持哪些参数可以去看[源代码](https://github.com/qiu8310/yod-mock/tree/master/src/mocks)__
 
 
 #### 只想在最上面特别说明下 `Data` 类型：
 
 <table>
-<tr><td>`@Date()`</td><td>过去10年的随机 timestamp</td></tr>
-<tr><td>`@Date(0)`</td><td>过去10年到未来10年之间的一个 timestamp</td></tr>
-<tr><td>`@Date(-2)`</td><td>过去两年的随机 timestamp</td></tr>
-<tr><td>`@Date(3)`</td><td>将来三年的随机 timestamp</td></tr>
-<tr><td>`@Date(-1, 3600)`</td><td>过去 3600 分（即过去一小时）间的随机 timestamp</td></tr>
-<tr><td>`@Date("2011-1-1", "2011-12-31 23:59:59")`</td><td>2011-1-1 00:00:00 到 2011-12-31 23:59:59 之间的随机数据</td></tr>
+<tr><td>@Date()</td><td>过去10年的随机 timestamp</td></tr>
+<tr><td>@Date(0)</td><td>过去10年到未来10年之间的一个 timestamp</td></tr>
+<tr><td>@Date(-2)</td><td>过去两年的随机 timestamp</td></tr>
+<tr><td>@Date(3)</td><td>将来三年的随机 timestamp</td></tr>
+<tr><td>@Date(-1, 3600)</td><td>过去 3600 分（即过去一小时）间的随机 timestamp</td></tr>
+<tr><td>@Date("2011-1-1", "2011-12-31 23:59:59")</td><td>2011-1-1 00:00:00 到 2011-12-31 23:59:59 之间的随机数据</td></tr>
 </table>
 
 __上面所有生成的都是 10 位的 Unix 时间戳，这是我们在接口中常用的格式，如果你想输出其它格式，
@@ -139,10 +191,10 @@ __上面所有生成的都是 10 位的 Unix 时间戳，这是我们在接口�
 * Longitude
 * Coordinates
 
-__另外还一个特殊的 Type：`Lodash`，别名 `_`，可以这么用它：__
+__另外还一个特殊的 Type：`Lodash`，别名 `_`，可以这么用它（不建议用它做 Type，用它做 Modifier 会非常强大）：__
 
 ```javascript
-yod('_([a, b, c]).sample'); // 从数组 ['a', 'b', 'c'] 中随机取出一个值来
+yod('@_([a, b, c]).value.sample'); // 从数组 ['a', 'b', 'c'] 中随机取出一个值来
 ```
 
 
@@ -161,7 +213,7 @@ __e.g__
 ```javascript
 yod('@Bool.repeat(2)')    // => 可能生成 [true, false]
   
-yod('@Int.repeat(3, "-")  // => 可能生成 "20-3-12"
+yod('@Int.repeat(3, "-")')  // => 可能生成 "20-3-12"
 ```
 
 #### index(n)
@@ -197,6 +249,7 @@ __另外，modifier 中加了入 [lodash](https://lodash.com/docs) 的所有功�
 * [yod][yod]：本项目的核心引擎（我写的）。
 * [mockjs](http://mockjs.com/#)：阿里出的，也不错，但学习成功较高，也不够强大。
 * [chance](http://chancejs.com/)：国外的一个 mock 库，代码很简洁，但不适合中国人用。
+* [jsonfy](http://github.com/qiu8310/jsonfy)：将任意的字符串解析成 JS 里的数据，类似于 JSON.parse，但语法要求没它那么严格（我写的）。
 * [sscan](http://github.com/qiu8310/sscan)：字符串分析器，很多复杂的解析用正则表达式是满足不了要求的，所以需要把字符串化分成字符来一个个解析（我写的）。
 * [elegant.def](http://github.com/qiu8310/elegant.def)：优雅的定义 JS 函数，很多情况下我们定义了函数要处理参数的各种情况，用了它处理函数参数就非常简单了（我写的）。
 
