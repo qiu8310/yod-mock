@@ -48,14 +48,14 @@ Random.image('200x100', '#ffcc33', '#FFF', 'png', '!')
 ### Node.js
 
 ```bash
-npm install --save yod-mock
+npm install --save-dev yod-mock
 ```
 __如果全局安装，可以使用 `yod` 命令，在命令行上输出 mock 的数据，使用 `yod -c xxx` 可以复制生成的内容__
 
 ### Browser
 
 ```bash
-bower install --save yod-mock
+bower install --save-dev yod-mock
 ```
 
 ## Usage
