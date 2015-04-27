@@ -4,31 +4,49 @@ var cp = require('copy-paste');
 
 var yod = require('./src/yod-mock');
 
-var copy, str;
+var copy, caller, params, args = process.argv.slice(2);
 
-yod._.each(process.argv.slice(2), function(arg) {
-  if (arg === '-c') {
-    copy = true;
-  } else if (arg[0] !== '-') {
-    str = arg;
-  }
-});
+if (args.indexOf('-c') >= 0) {
+  copy = true;
+  args.splice(args.indexOf('-c'), 1);
+}
 
-
-if (!str) {
+if (!args.length) {
   console.log('\r\n  Usage:');
   console.log('\r\n  yod [-c] generator\r\n\r\n');
 } else {
-  str = str.replace(/^@/, '');
+
+  caller = args.shift();
+  params = false;
+  args.forEach(function(arg) {
+    if (arg[0] !== '.') {
+      if (!params) {
+        params = [];
+      }
+      params.push(arg);
+    } else {
+      if (params) {
+        caller += '(' + params.join(', ') + ')';
+      }
+      caller += arg;
+      params = false;
+    }
+  });
+
+  if (params) {
+    caller += '(' + params.join(', ') + ')';
+  }
+
+  caller = caller.replace(/^@/, '');
 
   try {
-    str = yod('@' + yod._.capitalize(str));
+    caller = yod('@' + yod._.capitalize(caller));
 
     console.log();
-    console.log(str);
+    console.log(caller);
     console.log();
 
-    if (copy) { cp.copy(str); }
+    if (copy) { cp.copy(caller); }
   } catch (e) {
     console.log('\nError: ' + e.message + '\n');
   }
