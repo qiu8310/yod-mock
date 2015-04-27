@@ -8,13 +8,10 @@
 
 module.exports = function(yod, def, _, helper) {
 
-  var User = require('../data/user');
-
   /*------------------------------------------------------------------
             ---------------  Gender & Sex  ---------------------
    ------------------------------------------------------------------*/
 
-  yod.config('system.user.gender', User.gender);
   yod.type('Gender', def(function(cate) {
     return helper.sysConfig('user.gender', {category: cate || 'en'});
   }), 'Sex');
@@ -24,7 +21,7 @@ module.exports = function(yod, def, _, helper) {
    ------------------------------------------------------------------*/
 
   yod.type('Age', def(function(type) {
-    switch(type) {
+    switch (type) {
       case 'child':
         return _.random(1, 12);
       case 'teen':
@@ -44,15 +41,13 @@ module.exports = function(yod, def, _, helper) {
             ---------------  Avatar  ---------------------
    ------------------------------------------------------------------*/
 
-  yod.config('system.user.avatar', require('../data/picture').user);
 
-  yod.type('Avatar', def(function() { return helper.sysConfig('user.avatar'); }));
+  yod.type('Avatar', def(function() { return helper.sysConfig('picture.user'); }));
 
 
   /*------------------------------------------------------------------
           ---------------  First & FirstName  ---------------------
    ------------------------------------------------------------------*/
-  yod.config('system.user.first', User.first);
 
   yod.type('First', def(function (gender) {
 
@@ -64,7 +59,6 @@ module.exports = function(yod, def, _, helper) {
   /*------------------------------------------------------------------
           ---------------  Last & LastName  ---------------------
    ------------------------------------------------------------------*/
-  yod.config('system.user.last', User.last);
 
   yod.type('Last', def(function () {
 
@@ -84,7 +78,7 @@ module.exports = function(yod, def, _, helper) {
      * @rules ([[String gender], [Boolean middle]]) -> String
      * @rules (Boolean middle, String gender) -> String
      */
-    return yod('@First(%s)%s @Last', this.gender, this.middle ? ' @First('+this.gender+')' : '' );
+    return yod('@First(%s)%s @Last', this.gender, this.middle ? ' @First(' + this.gender + ')' : '' );
 
   }));
 
@@ -94,7 +88,8 @@ module.exports = function(yod, def, _, helper) {
    ------------------------------------------------------------------*/
   yod.type('Name', def(function() {
 
-    return _.sample(User.family, _.random(1, 2)).join('') + _.sample(User.giveName, _.random(1, 2)).join('');
+    return _.sample(yod.config('system.user').family, _.random(1, 2)).join('') +
+      _.sample(yod.config('system.user').giveName, _.random(1, 2)).join('');
 
   }), 'ChineseName');
 
@@ -103,7 +98,7 @@ module.exports = function(yod, def, _, helper) {
    ------------------------------------------------------------------*/
   yod.type('Nick', def(function() {
 
-    return _.sample(User.nick);
+    return _.sample(yod.config('system.user').nick);
 
   }), 'NickName');
 
@@ -113,7 +108,7 @@ module.exports = function(yod, def, _, helper) {
    ------------------------------------------------------------------*/
   yod.type('Comment', def(function() {
 
-    return _.sample(User.comment);
+    return _.sample(yod.config('system.user').comment);
 
   }));
 

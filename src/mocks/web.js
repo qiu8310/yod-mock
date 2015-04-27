@@ -14,7 +14,7 @@ module.exports = function(yod, def, _, helper) {
     if (helper.shortCut(format, 'short')) {
       len = 3;
     } else if (helper.shortCut(format, 'rgb')) {
-      return helper.f('rgb(%d, %d, %d)', _.random(0, 255), _.random(0, 255), _.random(0, 255));
+      return 'rgb(' + _.random(0, 255) + ', ' + _.random(0, 255) + ', ' + _.random(0, 255) + ')';
     }
     return '#' + _.sample('0123456789ABCDEF', len).join('');
 

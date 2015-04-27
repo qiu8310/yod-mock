@@ -104,7 +104,7 @@ module.exports = function(yod, def, _, helper) {
   chars.all = chars.alpha + chars.symbol;
 
   // 使用 yod.config 的目的是使的用户可以修改这些默认的值
-  yod.config('system.basic.character', chars, {category: 'alpha'});
+  yod.config('system.character', chars, {category: 'alpha'});
 
   // define
   yod.type('Character', def(function() {
@@ -265,10 +265,12 @@ module.exports = function(yod, def, _, helper) {
      * @reference http://zh.wikipedia.org/wiki/%E5%85%A8%E5%B1%80%E5%94%AF%E4%B8%80%E6%A0%87%E8%AF%86%E7%AC%A6
      */
 
+    /* jshint ignore:start */
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
       var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
       return v.toString(16);
     });
+    /* jshint ignore:end */
 
   }), 'GUID', 'Uuid', 'UUID');
 

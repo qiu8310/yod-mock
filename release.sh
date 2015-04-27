@@ -43,7 +43,7 @@ if test $# -gt 0; then
     && echo 'publish docs to gh-pages branch' \
     && sh './publish_docs.sh' \
     && echo 'npm publish ... ' \
-    && npm publish
+    && npm publish -d
 else
   echo '\033[31m version number required \033[0m'
   exit 1

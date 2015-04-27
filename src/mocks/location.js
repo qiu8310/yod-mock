@@ -8,18 +8,16 @@
 
 module.exports = function(yod, def, _, helper) {
 
-  var Data = require('../data/location');
-
   yod.type('Country', def(function(abbr) {
-    return _.sample(Data.country)[abbr ? 1 : 0];
+    return _.sample(yod.config('system.location').country)[abbr ? 1 : 0];
   }));
 
   yod.type('Province', def(function() {
-    return _.sample(Data.region).split(' ').pop();
+    return _.sample(yod.config('system.location').region).split(' ').pop();
   }), 'Region');
 
   yod.type('Area', def(function() {
-    return _.sample(Data.area);
+    return _.sample(yod.config('system.location').area);
   }));
 
   //yod.type('City', def(function() {}));

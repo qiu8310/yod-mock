@@ -27,11 +27,10 @@
     "data"
   ],
   "dependencies": {
+    "copy-paste": "^1.1.0",
     "elegant.def": "^1.2.0",
-    "lodash": "^3.7.0",
     "moment": "^2.10.2",
-    "sprintf-js": "^1.0.2",
-    "yod": "^0.1.1"
+    "yod": "^1.0.0-alpha.1"
   },
   "devDependencies": {
     "coveralls": "^2.11.1",
@@ -46,10 +45,11 @@
     "gulp-plumber": "^1.0.0",
     "jsdoc": "^3.3.0-beta3",
     "jshint-stylish": "^1.0.1",
-    "should": "^6.0.1",
-    "webpack": "^1.8.9"
+    "lodash": "^3.7.0",
+    "should": "^6.0.1"
   },
   "scripts": {
+    "page": "node tools/build.js && webpack src/b.js --output-file='browser/yod-mock.js' && webpack src/b.js -p --output-file='browser/yod-mock.min.js' && cp browser/yod* gh-pages && rm src/b.js",
     "docs": "rm -rf docs && ./node_modules/.bin/jsdoc -c ./jsdoc.json ./README.md && echo 'code{padding: 2px 4px;font-size: 90%;color:#c7254e;background-color:#f9f2f4;border-radius:4px;}' >> ./docs/styles/jsdoc-default.css",
     "coveralls": "gulp test && cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "test": "gulp test"

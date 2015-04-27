@@ -47,6 +47,10 @@ module.exports = function(yod, def, _, helper) {
     return this.arg;
   }));
 
+  yod.modifier('stringify', function(obj) {
+    return JSON.stringify(obj);
+  });
+
 
   yod.modifier('String', 'title', function(str) {
     return str.replace(/\b\w/g, function(letter) { return letter.toUpperCase(); });
@@ -64,7 +68,7 @@ module.exports = function(yod, def, _, helper) {
 
   // 复用 lodash
   _.each(_.keys(_), function(key) {
-    if (/^[a-z]\w*$/.test(key) && key !== 'repeat') {
+    if (yod.isModifierNameValid(key) && !yod.isModifierNameExists(key)) {
       yod.modifier(key, function() {
         return _[key].apply(_, arguments);
       });

@@ -18,6 +18,7 @@
  * 中文 Unicode 编码范围：4e00 - 952f（19968 - 38191）
  * Reference: http://wenku.baidu.com/view/a776c3270722192e4536f667.html
  */
+/* jshint ignore:start */
 function word(self) {
   /**
    * @defaults {lang: en}
@@ -31,3 +32,4 @@ function word(self) {
   // 生成复杂的中文 String.fromCharCode(_.random(19968, 38191))
   return _.sample(texts);
 }
+/* jshint ignore:end */

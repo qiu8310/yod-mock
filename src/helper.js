@@ -6,10 +6,8 @@
  * Licensed under the MIT license.
  */
 
-var f = require("sprintf-js").sprintf;
-var _ = require('lodash');
 var yod = require('yod');
-
+var _ = yod._;
 
 /**
  * 如果通过这个 key ，只能在 keys 中匹配到唯一的一个值，则返回此值，否则返回 false
@@ -73,7 +71,7 @@ module.exports = {
    * @returns {*}
    */
   sysConfig: function(key, opts) {
-    var data = yod.config(f('system.%s:meta', key));
+    var data = yod.config('system.' + key + ':meta');
     var val = data.val, meta = data.meta || {};
     opts = opts || {};
 
@@ -102,19 +100,5 @@ module.exports = {
     }
 
     return val;
-  },
-
-  /**
-   * 格式化输出字符串
-   *
-   * @type {Function}
-   *
-   * @example
-   *
-   * helper.f('a string %s, a json %j', 'foo', {...})
-   *
-   * helper.f('named format %(a.b.c)', {a: {b: c}}
-   *
-   */
-  f: f
+  }
 };

@@ -8,16 +8,14 @@
 
 module.exports = function(yod, def, _, helper) {
 
-  var Data = require('../data/word');
-
   yod.type('CW', def(function() {
-    return _.sample(Data.cn);
+    return _.sample(yod.config('system.word').cn);
   }));
 
   yod.type('CS', def(function() {
-    var len = Data.cn.length - 20, res = [];
+    var len = yod.config('system.word').cn.length - 20, res = [];
     _.times(_.random(1, 4), function() {
-      res.push(Data.cn.substr(_.random(0, len), _.random(8, 20)));
+      res.push(yod.config('system.word').cn.substr(_.random(0, len), _.random(8, 20)));
     });
     return res.join('，') + '。';
   }));
@@ -84,11 +82,11 @@ module.exports = function(yod, def, _, helper) {
   }), 'EP');
 
   yod.type('Good', def(function() {
-    return _.sample(Data.good);
+    return _.sample(yod.config('system.word').good);
   }));
 
   yod.type('Face', def(function() {
-    return _.sample(Data.face);
+    return _.sample(yod.config('system.word').face);
   }));
 
 };
