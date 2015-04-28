@@ -12,12 +12,22 @@
 
 本项目主要用来在测试环境中生成测试数据用的，另外也可以在命令行上快速生成简单测试数据。
 
-主要特点：
+
+> __背景__
+>
+> - 前端程序员会因为后端没有接口数据，开发某些功能可能就不太方便
+> - 而后端程序员常会被前端程序员催促给接口，给数据，但你也还没开发完时会显得他们很烦人
+>
+> 此工具就是希望在前后端都没有数据的情况下生成大量随机的测试数据 
+>
+
+
+__主要特点：__
 
 * 语法简洁，学习成本低，功能强大
 * 支持所有 JS 原生的函数
 * 支持所有 [lodash](https://lodash.com/docs) 的函数
-* 支持处定义新的 type 和 modifier
+* 支持自定义新的 type 和 modifier
 * 支持配置系统现有的数据（使用 `yod.config('system.xxx', ...)`）
 
 [在线体验本项目的功能](http://qiu8310.github.io/yod-mock/)
@@ -60,7 +70,14 @@ bower install --save-dev yod-mock
 
 ## Usage
 
-此项目只是在 [yod][yod] 项目基础上定义了一些常用的 type 和 modifier。（type 和 modifier 的细节可以在 [yod][yod] 项目中查看）
+
+__一般只需要两步：__
+
+- 第一步，先定义你的数据结构体 `yod.type('xxx', {...})`
+- 第二步，使用你的结构体生成数据 `yod('@xxx.repeat(5, 10)')`
+
+
+__DEMO：（[你可以在线查看编辑此DEMO](http://qiu8310.github.io/yod-mock/)）__
 
 ```javascript
 
@@ -99,9 +116,18 @@ yod.type('User', {
 });
 
 // 用上面的 User 结构体 重复生成 2 - 4 个 User
-console.log(yod('@User.repeat(2, 4)'));
+console.log(yod({
+    status: 'ok',
+    list: '@User.repeat(2, 4)'
+}));
+
+// 你也可以直接返回一个数组
+// console.log(yod('@User.repeat(2, 4)'));
 
 ```
+
+
+_此项目只是在 [yod][yod] 项目基础上定义了一些常用的 type 和 modifier。(type 和 modifier 的细节可以在 [yod][yod] 项目中查看)_
 
 
 ### Types
