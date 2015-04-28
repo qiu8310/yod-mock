@@ -136,7 +136,7 @@ __有太多 types 了，我不想一个个写它的参数，其实用法都很�
 我下面只写出支持的 types 名称，具体支持哪些参数可以去看[源代码](https://github.com/qiu8310/yod-mock/tree/master/src/mocks)__
 
 
-#### 只想在最上面特别说明下 `Data` 类型：
+#### 只想在最上面特别说明下 `Date` 类型：
 
 <table>
 <tr><td>@Date()</td><td>过去10年的随机 timestamp</td></tr>
@@ -148,7 +148,7 @@ __有太多 types 了，我不想一个个写它的参数，其实用法都很�
 </table>
 
 __上面所有生成的都是 10 位的 Unix 时间戳，这是我们在接口中常用的格式，如果你想输出其它格式，
-可以在 `Data` 的第一个参数上加上格式字符串，所有支持的格式在这：[moment#format](http://momentjs.com/docs/#/displaying/format/)__
+可以在 `Date` 的第一个参数上加上格式字符串，所有支持的格式在这：[moment#format](http://momentjs.com/docs/#/displaying/format/)__
 
 ```javascript
 @Date('YYYY-MM-DD HH:mm:ss', -2); // 将生成一个像 "2014-05-12 21:04:19" 一样的字符串
