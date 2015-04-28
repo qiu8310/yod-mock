@@ -1,0 +1,110 @@
+<html>
+  <head>
+    <title>Online Object Data Generator —— YOD </title>
+    <meta name="description" content="The online object data generator, fantasy data generator experiences. source code on [yod](https://github.com/qiu8310/yod)"/>
+    <meta name="keywords" content="yod, mock, data, generator, online"/>
+    <meta name="author" content="Zhonglei Qiu"/>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link rel="stylesheet" href="stylesheets/normalize.css">
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="stylesheets/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <style>
+
+    </style>
+  </head>
+
+  <body>
+
+  <div id="header">
+    <nav>
+      <li id="title"><h1>Yod Mock</h1><p>Powerful data generator tool. —— engined by <a class="yod" href="https://github.com/qiu8310/yod">Yod</a></p></li>
+      <li class="link fork" id="rebuild"><a>刷新数据</a></li>
+      <li class="link downloads last"><a href="https://github.com/qiu8310/yod-mock/tarball/master">TAR</a></li>
+      <li class="link downloads"><a href="https://github.com/qiu8310/yod-mock/zipball/master">ZIP</a></li>
+      <li class="link fork"><a href="https://github.com/qiu8310/yod-mock">View On GitHub</a></li>
+
+    </nav>
+  </div><!-- end header -->
+
+    <div id="container">
+      <div id="editor">// 定义一个用户类型
+yod.type('User', {
+  firstName: '@First',
+  myFirstNameLength: '@Self.firstName.length',
+  lastName: '@Last',
+  '@Self.lastName': 'is my family name',
+  fullName: '@Self.firstName @Self.lastName',
+  nickName: '@Nick',
+  chineseName: '@ChineseName',
+  children: '@First.repeat(1, 3)',
+  favouriteChild: '@Self.children.sample',
+  age: '@Age(adult)',
+  to100: '` 100 - @Self.age `',
+  telephone: '@Tel',
+  avatar: '@Avatar',
+  others: {
+     words: 'Hello, my name is @Parent.fullName, you can call me @Parent.nickName.',
+     bestFriends: '@Nick.repeat(2, 3).join(", ")'
+  }
+});
+
+// 重复生成 2 - 4 个用户
+console.log(yod('@User.repeat(2, 4)'));
+      </div>
+      <div id="out"></div>
+    </div>
+
+    <script src="yod-mock.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="http://cdn.staticfile.org/ace/1.1.3/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script>
+      var _ = yod._;
+
+      var editor = ace.edit("editor");
+      editor.setTheme("ace/theme/monokai");
+      editor.getSession().setMode("ace/mode/javascript");
+
+      var out = ace.edit("out");
+      out.getSession().setMode("ace/mode/javascript");
+      out.setReadOnly(true);
+
+      var strip = '\r\n\r\n//====================  Separator =====================//\r\n\r\n';
+      function appendOut(str) {
+        var bef = out.getValue();
+        out.setValue(bef + (bef !== '' ? strip : '') + str);
+        out.gotoLine(out.session.getLength());
+      }
+
+      function build() {
+        try {
+          var source = editor.getValue();
+          out.setValue('');
+          eval(source);
+        } catch (e) {
+          appendOut(e.stack);
+        }
+      }
+
+      var old = console.log;
+      console.log = function() {
+        old.apply(console, arguments);
+        _.each(_.slice(arguments), function(arg) {
+          appendOut(JSON.stringify(arg, null, 2));
+        });
+      };
+
+      build();
+      document.getElementById('rebuild').addEventListener('click', build);
+      editor.getSession().on('change', yod._.debounce(build, 1500));
+    </script>
+  </body>
+</html>
