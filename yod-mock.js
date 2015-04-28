@@ -939,11 +939,11 @@
 	 * 不支持 heredoc，适合用在代码需要压缩的地方（代码压缩会将 heredoc 给删除了）
 	 */
 
-	var base = __webpack_require__(7);
-	var option = __webpack_require__(8);
-	var Rule = __webpack_require__(9);
-	var type = __webpack_require__(10);
-	var Self = __webpack_require__(11);
+	var base = __webpack_require__(4);
+	var option = __webpack_require__(5);
+	var Rule = __webpack_require__(6);
+	var type = __webpack_require__(7);
+	var Self = __webpack_require__(8);
 
 	/**
 	 *
@@ -984,9 +984,9 @@
 
 	var _ = __webpack_require__(12);
 
-	var config = __webpack_require__(4),
-	  gen = __webpack_require__(5).generator,
-	  tm = __webpack_require__(6);
+	var config = __webpack_require__(9),
+	  gen = __webpack_require__(10).generator,
+	  tm = __webpack_require__(11);
 
 
 
@@ -1109,266 +1109,6 @@
 
 /***/ },
 /* 4 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/*
-	 * yod
-	 * https://github.com/qiu8310/yod
-	 *
-	 * Copyright (c) 2015 Zhonglei Qiu
-	 * Licensed under the MIT license.
-	 */
-
-	var _ = __webpack_require__(12);
-
-	var _meta = {};
-	var _all = {};
-
-
-	var _reMeta = /:meta$/;
-
-
-	/**
-	 * Set or get config key.
-	 *
-	 * @param {String} key
-	 * @param {*} [val]
-	 * @param {Object} [meta]
-	 * @returns {*}
-	 */
-	function config(key, val, meta) {
-
-	  var keys, lastKey, addMeta;
-
-	  addMeta = _reMeta.test(key);
-	  key = key.replace(_reMeta, '');
-	  keys = key.split('.');
-
-	  // get
-	  if (_.isUndefined(val)) {
-	    meta = _meta[key];
-	    val = _.reduce(keys, function(ref, k) {
-	      if (ref && ref.hasOwnProperty && ref.hasOwnProperty(k)) {
-	        ref = ref[k];
-	        return ref;
-	      }
-	    }, _all);
-
-	  } else { // set
-	    if (!_.isUndefined(meta)) { _meta[key] = meta; }
-	    lastKey = keys.pop();
-
-	    var prevVal = _.reduce(keys, function(ref, k) {
-	      if (!_.isObject(ref[k])) { ref[k] = {}; }
-
-	      ref = ref[k];
-
-	      return ref;
-	    }, _all);
-
-	    prevVal[lastKey] = val;
-	  }
-
-	  return addMeta ? {meta: meta, val: val} : val;
-	}
-
-
-	config.all = _all;
-	config.meta = _meta;
-
-	module.exports = config;
-
-
-/***/ },
-/* 5 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/*
-	 * yod
-	 * https://github.com/qiu8310/yod
-	 *
-	 * Copyright (c) 2015 Zhonglei Qiu
-	 * Licensed under the MIT license.
-	 */
-
-	var KVPairNode = __webpack_require__(13);
-	var parse = __webpack_require__(14);
-	var _ = __webpack_require__(12);
-
-	module.exports = {
-	  generator: function(obj) {
-	    return function() {
-	      if (_.isPlainObject(obj)) {
-	        return (new KVPairNode(obj)).getValue();
-	      } else if (_.isFunction(obj)) {
-	        return obj();
-	      } else {
-	        return parse(obj);
-	      }
-	    };
-	  }
-	};
-
-
-/***/ },
-/* 6 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/*
-	 * yod
-	 * https://github.com/qiu8310/yod
-	 *
-	 * Copyright (c) 2015 Zhonglei Qiu
-	 * Licensed under the MIT license.
-	 */
-
-	'use strict';
-	var _ = __webpack_require__(12),
-	  type = __webpack_require__(15),
-	  modifier = __webpack_require__(16);
-
-	/**
-	 *
-	 * Simple group of type and modifier, "t" meaning {@link type}, "m" meaning {@link modifier}.
-	 *
-	 * @namespace
-	 * @type {Object}
-	 */
-	var tm = {};
-
-
-	/**
-	 * Define a new type
-	 *
-	 * @param {String} name - type name
-	 * @param {Array|String} [aliases = []] - type aliases
-	 * @param {Function} fn - type function
-	 * @param {*} [ctx = null] - type function's bind target
-	 *
-	 * @example
-	 *
-	 * // 随机生成布尔值
-	 * yod.type('Boolean', ['Bool'], function() {
-	 *   return Date.now() % 2 === 0;
-	 * });
-	 *
-	 */
-	tm.type = function(name, aliases, fn, ctx) {
-	  if (_.isFunction(aliases)) {
-	    ctx = fn;
-	    fn = aliases;
-	    aliases = [];
-	  }
-
-	  type.create(name, fn, ctx);
-
-	  _.each([].concat(aliases), function(alias) { type.alias(alias, name); });
-	};
-
-
-	/**
-	 * Define a new modifier
-	 * @param {String|Function|Array} [filters = []] - modifier filters
-	 * @param {String} name - modifier name
-	 * @param {Function} fn - modifier function
-	 * @param {*} [ctx = null] - modifier function's bind target
-	 * @example
-	 *
-	 * yod.modifier('String', 'first', function(str) {
-	 *   return str[0];
-	 * });
-	 *
-	 * @example
-	 *
-	 * function isFooBar(arg) {
-	 *   if (arg === 'foo' || arg === 'bar') { return true; }
-	 * }
-	 * yod.hook(['String', isFooBar], 'double', function(fooBarStr) {
-	 *   return fooBarStr + fooBarStr;
-	 * });
-	 */
-	tm.modifier = function(filters, name, fn, ctx) {
-	  if (_.isFunction(name)) {
-	    ctx = fn;
-	    fn = name;
-	    name = filters;
-	    filters = [];
-	  }
-
-	  modifier.create([].concat(filters), name, fn, ctx);
-	};
-
-	/**
-	 * Clean all defined types and modifiers
-	 */
-	tm.clean = function(arg) {
-	  var obj = {type: type, modifier: modifier};
-	  _.each([].concat(obj[arg] || _.values(obj)), function(t){
-	    _.each(t.all, function(v, k) {
-	      delete t.all[k];
-	    });
-	  });
-	};
-
-
-	/**
-	 * Function's modifier generator
-	 * @param {Function} fn
-	 * @param {Array} modSeries
-	 * @returns {Function}
-	 */
-	tm.fnGenerator = function(fn, modSeries) {
-	  return _.reduce([].concat(modSeries ? modSeries : []), function(fn, mod) {
-	    return modifier.generator(fn, mod.name, mod.args, mod.ctx);
-	  }, fn);
-	};
-
-	/**
-	 * Generator type and modifier series generator.
-	 *
-	 *
-	 * @param {String} [typeName]
-	 * @param {Array} [series] - type and modifier arrays, series's first argument is type, and others is modifier
-	 * @returns {Function}
-	 * @example
-	 *
-	 * yod.generator('Bool');
-	 *
-	 * @example
-	 *
-	 * yod.generator('Bool', [{name: 'repeat', args: [3, 8]}]);
-	 *
-	 * @example
-	 *
-	 * yod.generator([ {name: 'Bool', args: [0.6]}, {name: 'repeat', args: [3]} ]);
-	 */
-	tm.generator = function(typeName, series) {
-	  var typ,
-	    mods;
-
-	  if (_.isString(typeName)) {
-	    typ = {name: typeName};
-	    mods = series || [];
-	  } else {
-	    series = typeName;
-	    typ = series[0];
-	    mods = series.slice(1);
-	  }
-
-	  var fn = type.generator(typ.name, typ.args, typ.ctx);
-
-	  return tm.fnGenerator(fn, mods);
-	};
-
-	tm.t = type;
-	tm.m = modifier;
-
-	module.exports = tm;
-
-
-
-/***/ },
-/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -1566,7 +1306,7 @@
 
 
 /***/ },
-/* 8 */
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -1596,11 +1336,11 @@
 
 
 /***/ },
-/* 9 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var base = __webpack_require__(7),
-	  type = __webpack_require__(10);
+	var base = __webpack_require__(4),
+	  type = __webpack_require__(7);
 
 	module.exports = {
 	  /**
@@ -1665,14 +1405,14 @@
 
 
 /***/ },
-/* 10 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
 	 * @module type
 	 */
 
-	var base = __webpack_require__(7);
+	var base = __webpack_require__(4);
 
 	var type = {};
 
@@ -1788,11 +1528,11 @@
 
 
 /***/ },
-/* 11 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var base = __webpack_require__(7);
-	var Rule = __webpack_require__(9);
+	var base = __webpack_require__(4);
+	var Rule = __webpack_require__(6);
 
 	/**
 	 * @class Self
@@ -1859,13 +1599,273 @@
 
 
 /***/ },
+/* 9 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*
+	 * yod
+	 * https://github.com/qiu8310/yod
+	 *
+	 * Copyright (c) 2015 Zhonglei Qiu
+	 * Licensed under the MIT license.
+	 */
+
+	var _ = __webpack_require__(12);
+
+	var _meta = {};
+	var _all = {};
+
+
+	var _reMeta = /:meta$/;
+
+
+	/**
+	 * Set or get config key.
+	 *
+	 * @param {String} key
+	 * @param {*} [val]
+	 * @param {Object} [meta]
+	 * @returns {*}
+	 */
+	function config(key, val, meta) {
+
+	  var keys, lastKey, addMeta;
+
+	  addMeta = _reMeta.test(key);
+	  key = key.replace(_reMeta, '');
+	  keys = key.split('.');
+
+	  // get
+	  if (_.isUndefined(val)) {
+	    meta = _meta[key];
+	    val = _.reduce(keys, function(ref, k) {
+	      if (ref && ref.hasOwnProperty && ref.hasOwnProperty(k)) {
+	        ref = ref[k];
+	        return ref;
+	      }
+	    }, _all);
+
+	  } else { // set
+	    if (!_.isUndefined(meta)) { _meta[key] = meta; }
+	    lastKey = keys.pop();
+
+	    var prevVal = _.reduce(keys, function(ref, k) {
+	      if (!_.isObject(ref[k])) { ref[k] = {}; }
+
+	      ref = ref[k];
+
+	      return ref;
+	    }, _all);
+
+	    prevVal[lastKey] = val;
+	  }
+
+	  return addMeta ? {meta: meta, val: val} : val;
+	}
+
+
+	config.all = _all;
+	config.meta = _meta;
+
+	module.exports = config;
+
+
+/***/ },
+/* 10 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*
+	 * yod
+	 * https://github.com/qiu8310/yod
+	 *
+	 * Copyright (c) 2015 Zhonglei Qiu
+	 * Licensed under the MIT license.
+	 */
+
+	var KVPairNode = __webpack_require__(13);
+	var parse = __webpack_require__(14);
+	var _ = __webpack_require__(12);
+
+	module.exports = {
+	  generator: function(obj) {
+	    return function() {
+	      if (_.isPlainObject(obj)) {
+	        return (new KVPairNode(obj)).getValue();
+	      } else if (_.isFunction(obj)) {
+	        return obj();
+	      } else {
+	        return parse(obj);
+	      }
+	    };
+	  }
+	};
+
+
+/***/ },
+/* 11 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*
+	 * yod
+	 * https://github.com/qiu8310/yod
+	 *
+	 * Copyright (c) 2015 Zhonglei Qiu
+	 * Licensed under the MIT license.
+	 */
+
+	'use strict';
+	var _ = __webpack_require__(12),
+	  type = __webpack_require__(15),
+	  modifier = __webpack_require__(16);
+
+	/**
+	 *
+	 * Simple group of type and modifier, "t" meaning {@link type}, "m" meaning {@link modifier}.
+	 *
+	 * @namespace
+	 * @type {Object}
+	 */
+	var tm = {};
+
+
+	/**
+	 * Define a new type
+	 *
+	 * @param {String} name - type name
+	 * @param {Array|String} [aliases = []] - type aliases
+	 * @param {Function} fn - type function
+	 * @param {*} [ctx = null] - type function's bind target
+	 *
+	 * @example
+	 *
+	 * // 随机生成布尔值
+	 * yod.type('Boolean', ['Bool'], function() {
+	 *   return Date.now() % 2 === 0;
+	 * });
+	 *
+	 */
+	tm.type = function(name, aliases, fn, ctx) {
+	  if (_.isFunction(aliases)) {
+	    ctx = fn;
+	    fn = aliases;
+	    aliases = [];
+	  }
+
+	  type.create(name, fn, ctx);
+
+	  _.each([].concat(aliases), function(alias) { type.alias(alias, name); });
+	};
+
+
+	/**
+	 * Define a new modifier
+	 * @param {String|Function|Array} [filters = []] - modifier filters
+	 * @param {String} name - modifier name
+	 * @param {Function} fn - modifier function
+	 * @param {*} [ctx = null] - modifier function's bind target
+	 * @example
+	 *
+	 * yod.modifier('String', 'first', function(str) {
+	 *   return str[0];
+	 * });
+	 *
+	 * @example
+	 *
+	 * function isFooBar(arg) {
+	 *   if (arg === 'foo' || arg === 'bar') { return true; }
+	 * }
+	 * yod.hook(['String', isFooBar], 'double', function(fooBarStr) {
+	 *   return fooBarStr + fooBarStr;
+	 * });
+	 */
+	tm.modifier = function(filters, name, fn, ctx) {
+	  if (_.isFunction(name)) {
+	    ctx = fn;
+	    fn = name;
+	    name = filters;
+	    filters = [];
+	  }
+
+	  modifier.create([].concat(filters), name, fn, ctx);
+	};
+
+	/**
+	 * Clean all defined types and modifiers
+	 */
+	tm.clean = function(arg) {
+	  var obj = {type: type, modifier: modifier};
+	  _.each([].concat(obj[arg] || _.values(obj)), function(t){
+	    _.each(t.all, function(v, k) {
+	      delete t.all[k];
+	    });
+	  });
+	};
+
+
+	/**
+	 * Function's modifier generator
+	 * @param {Function} fn
+	 * @param {Array} modSeries
+	 * @returns {Function}
+	 */
+	tm.fnGenerator = function(fn, modSeries) {
+	  return _.reduce([].concat(modSeries ? modSeries : []), function(fn, mod) {
+	    return modifier.generator(fn, mod.name, mod.args, mod.ctx);
+	  }, fn);
+	};
+
+	/**
+	 * Generator type and modifier series generator.
+	 *
+	 *
+	 * @param {String} [typeName]
+	 * @param {Array} [series] - type and modifier arrays, series's first argument is type, and others is modifier
+	 * @returns {Function}
+	 * @example
+	 *
+	 * yod.generator('Bool');
+	 *
+	 * @example
+	 *
+	 * yod.generator('Bool', [{name: 'repeat', args: [3, 8]}]);
+	 *
+	 * @example
+	 *
+	 * yod.generator([ {name: 'Bool', args: [0.6]}, {name: 'repeat', args: [3]} ]);
+	 */
+	tm.generator = function(typeName, series) {
+	  var typ,
+	    mods;
+
+	  if (_.isString(typeName)) {
+	    typ = {name: typeName};
+	    mods = series || [];
+	  } else {
+	    series = typeName;
+	    typ = series[0];
+	    mods = series.slice(1);
+	  }
+
+	  var fn = type.generator(typ.name, typ.args, typ.ctx);
+
+	  return tm.fnGenerator(fn, mods);
+	};
+
+	tm.t = type;
+	tm.m = modifier;
+
+	module.exports = tm;
+
+
+
+/***/ },
 /* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module, global) {/**
 	 * @license
 	 * lodash 3.7.0 (Custom Build) lodash.com/license | Underscore.js 1.8.3 underscorejs.org/LICENSE
-	 * Build: `lodash exports="node"`
+	 * Build: `lodash exports="node" --production`
 	 */
 	;(function(){function n(n,t){if(n!==t){var r=n===n,e=t===t;if(n>t||!r||n===w&&e)return 1;if(n<t||!e||t===w&&r)return-1}return 0}function t(n,t,r){for(var e=n.length,u=r?e:-1;r?u--:++u<e;)if(t(n[u],u,n))return u;return-1}function r(n,t,r){if(t!==t)return p(n,r);r-=1;for(var e=n.length;++r<e;)if(n[r]===t)return r;return-1}function e(n){return typeof n=="function"||false}function u(n){return typeof n=="string"?n:null==n?"":n+""}function o(n){return n.charCodeAt(0)}function i(n,t){for(var r=-1,e=n.length;++r<e&&-1<t.indexOf(n.charAt(r)););
 	return r}function a(n,t){for(var r=n.length;r--&&-1<t.indexOf(n.charAt(r)););return r}function f(t,r){return n(t.a,r.a)||t.b-r.b}function c(n){return Ln[n]}function l(n){return Pn[n]}function s(n){return"\\"+Mn[n]}function p(n,t,r){var e=n.length;for(t+=r?0:-1;r?t--:++t<e;){var u=n[t];if(u!==u)return t}return-1}function h(n){return!!n&&typeof n=="object"}function _(n){return 160>=n&&9<=n&&13>=n||32==n||160==n||5760==n||6158==n||8192<=n&&(8202>=n||8232==n||8233==n||8239==n||8287==n||12288==n||65279==n);
@@ -2007,7 +2007,7 @@
 	"\xe0":"a","\xe1":"a","\xe2":"a","\xe3":"a","\xe4":"a","\xe5":"a","\xc7":"C","\xe7":"c","\xd0":"D","\xf0":"d","\xc8":"E","\xc9":"E","\xca":"E","\xcb":"E","\xe8":"e","\xe9":"e","\xea":"e","\xeb":"e","\xcc":"I","\xcd":"I","\xce":"I","\xcf":"I","\xec":"i","\xed":"i","\xee":"i","\xef":"i","\xd1":"N","\xf1":"n","\xd2":"O","\xd3":"O","\xd4":"O","\xd5":"O","\xd6":"O","\xd8":"O","\xf2":"o","\xf3":"o","\xf4":"o","\xf5":"o","\xf6":"o","\xf8":"o","\xd9":"U","\xda":"U","\xdb":"U","\xdc":"U","\xf9":"u","\xfa":"u",
 	"\xfb":"u","\xfc":"u","\xdd":"Y","\xfd":"y","\xff":"y","\xc6":"Ae","\xe6":"ae","\xde":"Th","\xfe":"th","\xdf":"ss"},Pn={"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;","`":"&#96;"},Bn={"&amp;":"&","&lt;":"<","&gt;":">","&quot;":'"',"&#39;":"'","&#96;":"`"},zn={"function":true,object:true},Mn={"\\":"\\","'":"'","\n":"n","\r":"r","\u2028":"u2028","\u2029":"u2029"},Dn=zn[typeof exports]&&exports&&!exports.nodeType&&exports,qn=zn[typeof module]&&module&&!module.nodeType&&module,Kn=zn[typeof self]&&self&&self.Object&&self,Vn=zn[typeof window]&&window&&window.Object&&window,Yn=qn&&qn.exports===Dn&&Dn,Zn=Dn&&qn&&typeof global=="object"&&global&&global.Object&&global||Vn!==(this&&this.window)&&Vn||Kn||this,Gn=function(){
 	try{Object({toString:0}+"")}catch(n){return function(){return false}}return function(n){return typeof n.toString!="function"&&typeof(n+"")=="string"}}(),Jn=m();Dn&&qn&&Yn&&((qn.exports=Jn)._=Jn)}).call(this);
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(17)(module), (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(20)(module), (function() { return this; }())))
 
 /***/ },
 /* 13 */
@@ -2022,7 +2022,7 @@
 	 */
 
 	var _ = __webpack_require__(12);
-	var KVPair = __webpack_require__(18);
+	var KVPair = __webpack_require__(21);
 
 	/**
 	 *
@@ -2114,10 +2114,10 @@
 	 * Licensed under the MIT license.
 	 */
 
-	var Caller = __webpack_require__(19);
-	var engine = __webpack_require__(20);
+	var Caller = __webpack_require__(17);
+	var engine = __webpack_require__(18);
 	var _ = __webpack_require__(12);
-	var exec = __webpack_require__(21);
+	var exec = __webpack_require__(19);
 
 	/**
 	 * 解析字符串中的 Caller 调用，如果是数组，则遍历数组中的字符串，如果是其它类型，则直接返回
@@ -2440,154 +2440,6 @@
 /* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = function(module) {
-		if(!module.webpackPolyfill) {
-			module.deprecate = function() {};
-			module.paths = [];
-			// module.parent = undefined by default
-			module.children = [];
-			module.webpackPolyfill = 1;
-		}
-		return module;
-	}
-
-
-/***/ },
-/* 18 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/*
-	 * yod
-	 * https://github.com/qiu8310/yod
-	 *
-	 * Copyright (c) 2015 Zhonglei Qiu
-	 * Licensed under the MIT license.
-	 */
-
-	var _ = __webpack_require__(12);
-	var parse = __webpack_require__(14);
-
-
-	/**
-	 * Object's key value pair
-	 *
-	 * @param {String} key
-	 * @param {*} value
-	 * @param {KVPairNode} node
-	 * @constructor
-	 */
-	function KVPair(key, value, node) {
-	  /**
-	   * Object's key, can depends on Self, Parent object.
-	   * @type {String}
-	   */
-	  this.key = key;
-
-	  /**
-	   * Object's value, can depends on Self, Parent object.
-	   * @type {*}
-	   */
-	  this.value = value;
-
-	  /**
-	   * If the value is a KVPairNode.
-	   * @type {Boolean}
-	   */
-	  this.hasChildPairs = value instanceof node.constructor;
-
-	  /**
-	   * Object's reference.
-	   *
-	   * @type {KVPairNode}
-	   */
-	  this.node = node;
-
-	  this.resolvedKey = null;
-	  this.resolvedValue = null;
-	}
-
-	/**
-	 * Pair to string
-	 *
-	 * @returns {String}
-	 */
-	KVPair.prototype.toString = function() {
-	  return 'KVPair{"key": "' + this.key + '", "value": "' + this.value + '"}';
-	};
-
-
-	/**
-	 * 判断 pair 是否是当前 pair 的 父级元素
-	 * @param {KVPair} pair
-	 * @returns {boolean}
-	 */
-	KVPair.prototype.isParentOf = function(pair) {
-	  var node = pair.node;
-	  if (this.hasChildPairs) {
-	    while (node) {
-	      if (node === this.value) {
-	        return true;
-	      }
-	      node = node.parent;
-	    }
-	  }
-	  return false;
-	};
-
-	/**
-	 * 循环依赖检查
-	 * @param {KVPair} current
-	 * @param {[KVPair]} stack
-	 * @private
-	 */
-	function _recycleCheck(current, stack) {
-	  var index = stack.indexOf(current);
-	  if (index >= 0) {
-	    var s = _.map(stack.slice(index).concat(current), function(it) { return it.toString(); });
-	    throw new Error('Recycle depends found. ' + s.join(' -> '));
-	  }
-	}
-
-
-	/**
-	 * Get the resolved key
-	 * @param {Array} stack
-	 * @returns {String}
-	 */
-	KVPair.prototype.getKey = function(stack) {
-	  _recycleCheck(this, stack);
-	  stack.push(this);
-	  if (this.resolvedKey === null) {
-	    this.resolvedKey = parse(this.key, stack);
-	  }
-	  return this.resolvedKey;
-	};
-
-	/**
-	 * Get the resolved value
-	 * @param {Array} stack
-	 * @returns {*}
-	 */
-	KVPair.prototype.getValue = function(stack) {
-	  _recycleCheck(this, stack);
-	  stack.push(this);
-	  if (this.resolvedValue === null) {
-	    if (this.hasChildPairs) {
-	      this.resolvedValue = this.value.getValue(); // 调用 node 的 getValue
-	    } else {
-	      this.resolvedValue = parse(this.value, stack);
-	    }
-	  }
-	  return this.resolvedValue;
-	};
-
-	module.exports = KVPair;
-
-
-/***/ },
-/* 19 */
-/***/ function(module, exports, __webpack_require__) {
-
 	/*
 	 * yod
 	 * https://github.com/qiu8310/yod
@@ -2597,9 +2449,9 @@
 	 */
 	var _ = __webpack_require__(12);
 	var jsonfy = __webpack_require__(22);
-	var tm = __webpack_require__(6);
-	var allConfig = __webpack_require__(4).all;
-	var exec = __webpack_require__(21);
+	var tm = __webpack_require__(11);
+	var allConfig = __webpack_require__(9).all;
+	var exec = __webpack_require__(19);
 
 	function Caller(series) {
 
@@ -2625,12 +2477,10 @@
 	  if (!ser || ser.args || !value.hasOwnProperty(ser.name)) {
 	    throw new Error('Config key "' + (ser && ser.name || '') + '" not found.');
 	  }
-	  series.shift();
 	  while (ser && !ser.args && value.hasOwnProperty(ser.name)) {
 	    value = value[ser.name];
 	    ser = series.shift();
 	  }
-
 	  return tm.fnGenerator(function () {
 	    return value;
 	  }, series)();
@@ -2747,7 +2597,7 @@
 
 
 /***/ },
-/* 20 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -2907,7 +2757,7 @@
 
 
 /***/ },
-/* 21 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -2939,6 +2789,154 @@
 	}
 
 	module.exports = exec;
+
+
+/***/ },
+/* 20 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = function(module) {
+		if(!module.webpackPolyfill) {
+			module.deprecate = function() {};
+			module.paths = [];
+			// module.parent = undefined by default
+			module.children = [];
+			module.webpackPolyfill = 1;
+		}
+		return module;
+	}
+
+
+/***/ },
+/* 21 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*
+	 * yod
+	 * https://github.com/qiu8310/yod
+	 *
+	 * Copyright (c) 2015 Zhonglei Qiu
+	 * Licensed under the MIT license.
+	 */
+
+	var _ = __webpack_require__(12);
+	var parse = __webpack_require__(14);
+
+
+	/**
+	 * Object's key value pair
+	 *
+	 * @param {String} key
+	 * @param {*} value
+	 * @param {KVPairNode} node
+	 * @constructor
+	 */
+	function KVPair(key, value, node) {
+	  /**
+	   * Object's key, can depends on Self, Parent object.
+	   * @type {String}
+	   */
+	  this.key = key;
+
+	  /**
+	   * Object's value, can depends on Self, Parent object.
+	   * @type {*}
+	   */
+	  this.value = value;
+
+	  /**
+	   * If the value is a KVPairNode.
+	   * @type {Boolean}
+	   */
+	  this.hasChildPairs = value instanceof node.constructor;
+
+	  /**
+	   * Object's reference.
+	   *
+	   * @type {KVPairNode}
+	   */
+	  this.node = node;
+
+	  this.resolvedKey = null;
+	  this.resolvedValue = null;
+	}
+
+	/**
+	 * Pair to string
+	 *
+	 * @returns {String}
+	 */
+	KVPair.prototype.toString = function() {
+	  return 'KVPair{"key": "' + this.key + '", "value": "' + this.value + '"}';
+	};
+
+
+	/**
+	 * 判断 pair 是否是当前 pair 的 父级元素
+	 * @param {KVPair} pair
+	 * @returns {boolean}
+	 */
+	KVPair.prototype.isParentOf = function(pair) {
+	  var node = pair.node;
+	  if (this.hasChildPairs) {
+	    while (node) {
+	      if (node === this.value) {
+	        return true;
+	      }
+	      node = node.parent;
+	    }
+	  }
+	  return false;
+	};
+
+	/**
+	 * 循环依赖检查
+	 * @param {KVPair} current
+	 * @param {[KVPair]} stack
+	 * @private
+	 */
+	function _recycleCheck(current, stack) {
+	  var index = stack.indexOf(current);
+	  if (index >= 0) {
+	    var s = _.map(stack.slice(index).concat(current), function(it) { return it.toString(); });
+	    throw new Error('Recycle depends found. ' + s.join(' -> '));
+	  }
+	}
+
+
+	/**
+	 * Get the resolved key
+	 * @param {Array} stack
+	 * @returns {String}
+	 */
+	KVPair.prototype.getKey = function(stack) {
+	  _recycleCheck(this, stack);
+	  stack.push(this);
+	  if (this.resolvedKey === null) {
+	    this.resolvedKey = parse(this.key, stack);
+	  }
+	  return this.resolvedKey;
+	};
+
+	/**
+	 * Get the resolved value
+	 * @param {Array} stack
+	 * @returns {*}
+	 */
+	KVPair.prototype.getValue = function(stack) {
+	  _recycleCheck(this, stack);
+	  stack.push(this);
+	  if (this.resolvedValue === null) {
+	    if (this.hasChildPairs) {
+	      this.resolvedValue = this.value.getValue(); // 调用 node 的 getValue
+	    } else {
+	      this.resolvedValue = parse(this.value, stack);
+	    }
+	  }
+	  return this.resolvedValue;
+	};
+
+	module.exports = KVPair;
 
 
 /***/ },
