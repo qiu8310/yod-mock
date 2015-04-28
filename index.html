@@ -37,29 +37,46 @@
   </div><!-- end header -->
 
     <div id="container">
-      <div id="editor">// 定义一个用户类型
+      <div id="editor">/*
+  @Self: Current object
+  @Parent: Parent object
+  @Config: Configs in yod
+
+  @Xxx: Other pre-defined random data generator
+
+  In yod, Array is not object, only the plain javascript object.
+*/
+
+// 定义一个用户类型
 yod.type('User', {
   firstName: '@First',
   myFirstNameLength: '@Self.firstName.length',
   lastName: '@Last',
-  '@Self.lastName': 'is my family name',
+  '@Self.lastName': 'is my family name',  // Hack the object key!
   fullName: '@Self.firstName @Self.lastName',
   nickName: '@Nick',
   chineseName: '@ChineseName',
-  children: '@First.repeat(1, 3)',
-  favouriteChild: '@Self.children.sample',
+  children: '@First.repeat(1, 3)',    // Return an array.
+  favouriteChild: '@Self.children.sample', // Use lodash's `sample` function
   age: '@Age(adult)',
-  to100: '` 100 - @Self.age `',
+  to100: '` 100 - @Self.age `', // Execute the JS code.
   telephone: '@Tel',
   avatar: '@Avatar',
   others: {
      words: 'Hello, my name is @Parent.fullName, you can call me @Parent.nickName.',
-     bestFriends: '@Nick.repeat(2, 3).join(", ")'
+     bestFriends: '@Nick.repeat(2, 3).join(", ")' // Use native JS's `join` function
   }
 });
 
 // 重复生成 2 - 4 个用户
-console.log(yod('@User.repeat(2, 4)'));
+console.log(yod({
+  status: 'ok',
+  list: '@User.repeat(2, 4)'
+}));
+
+// 你也可以直接返回一个数组(去掉下面注释可以查看结果)
+// console.log(yod('@User.repeat(2, 4)'));
+
       </div>
       <div id="out"></div>
     </div>
