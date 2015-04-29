@@ -59,7 +59,7 @@ module.exports = {
       rate = 50;  // 默认 50%
     }
 
-    return _.sample(_.shuffle(_.range(101))) < rate ? hit : otherwise;
+    return _.sample(_.shuffle(_.range(100))) < rate ? hit : otherwise;
   },
 
   shortCut: shortCut,
