@@ -53,7 +53,6 @@
   },
   "scripts": {
     "page": "node tools/build.js browser && webpack page.js --output-file='browser/yod-mock.js' && webpack page.js -p --output-file='browser/yod-mock.min.js' && cp browser/yod* gh-pages && rm moment.js page.js",
-    "docs": "rm -rf docs && ./node_modules/.bin/jsdoc -c ./jsdoc.json ./README.md && echo 'code{padding: 2px 4px;font-size: 90%;color:#c7254e;background-color:#f9f2f4;border-radius:4px;}' >> ./docs/styles/jsdoc-default.css",
     "coveralls": "gulp test && cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "test": "node tools/build.js && gulp test"
   }

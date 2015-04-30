@@ -21,6 +21,8 @@ function save(data) { fs.writeJsonFileSync(out, data); }
 // init
 save(G);
 
+var dirtyWork = require('./lls-replies')(_, G);
+
 // watch
 require('fisher').watch(__dirname).on('update', function(node) {
   if (/data\.json$/.test(node.filepath)) {
