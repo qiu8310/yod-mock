@@ -6,7 +6,7 @@
  * Licensed under the MIT license.
  */
 
-module.exports = function(yod, def, _, helper) {
+module.exports = function(yod, def, _) {
 
   /*------------------------------------------------------------------
    ---------------  Picture & Pic & Image & Img  ---------------------
@@ -16,7 +16,7 @@ module.exports = function(yod, def, _, helper) {
     /**
      * @rules ([String category = 'all']) -> String
      */
-    return helper.sysConfig('picture', {category: this.category});
+    return _.sys('picture', {category: this.category});
   }), 'Pic', 'Image', 'Img');
 
   /*------------------------------------------------------------------
@@ -29,7 +29,7 @@ module.exports = function(yod, def, _, helper) {
      * @rules ([String category = 'all']) -> String
      */
 
-    return helper.sysConfig('audio', {category: this.category});
+    return _.sys('audio', {category: this.category});
   }), 'Mp3');
 
   /*------------------------------------------------------------------
@@ -42,7 +42,7 @@ module.exports = function(yod, def, _, helper) {
      * @rules ([String category = 'all']) -> String
      */
 
-    return helper.sysConfig('video', {category: this.category});
+    return _.sys('video', {category: this.category});
 
   }), 'Mp4');
 

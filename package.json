@@ -5,7 +5,7 @@
   "homepage": "https://github.com/qiu8310/yod-mock",
   "bugs": "https://github.com/qiu8310/yod-mock/issues",
   "license": "MIT",
-  "main": "src/yod-mock.js",
+  "main": "dist.js",
   "bin": {
     "yod": "cli.js"
   },
@@ -52,9 +52,9 @@
     "should": "^6.0.1"
   },
   "scripts": {
-    "page": "node tools/build.js && webpack src/b.js --output-file='browser/yod-mock.js' && webpack src/b.js -p --output-file='browser/yod-mock.min.js' && cp browser/yod* gh-pages && rm src/b.js",
+    "page": "node tools/build.js browser && webpack dist.js --output-file='browser/yod-mock.js' && webpack dist.js -p --output-file='browser/yod-mock.min.js' && cp browser/yod* gh-pages",
     "docs": "rm -rf docs && ./node_modules/.bin/jsdoc -c ./jsdoc.json ./README.md && echo 'code{padding: 2px 4px;font-size: 90%;color:#c7254e;background-color:#f9f2f4;border-radius:4px;}' >> ./docs/styles/jsdoc-default.css",
     "coveralls": "gulp test && cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
-    "test": "gulp test"
+    "test": "node tools/build.js && gulp test"
   }
 }

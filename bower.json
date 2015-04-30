@@ -28,6 +28,7 @@
     "**/.*",
     "*.sh",
     "gulpfile.js",
+    "dist.js",
     "node_modules",
     "bower_components",
     "test",

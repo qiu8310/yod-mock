@@ -6,9 +6,9 @@
  * Licensed under the MIT license.
  */
 
-var moment = require('moment');
+module.exports = function(yod, def, _) {
 
-module.exports = function(yod, def, _, helper) {
+  var moment = yod.moment;
 
   /*------------------------------------------------------------------
    ----------------------  Boolean & Bool     -------------------------
@@ -22,7 +22,7 @@ module.exports = function(yod, def, _, helper) {
      * @rules (String percentage) -> Boolean
      */
 
-    return helper.prob(this.$has('probability') ? this.probability : this.percentage);
+    return _.prob(this.$has('probability') ? this.probability : this.percentage);
 
   }), 'Bool');
 
@@ -83,7 +83,7 @@ module.exports = function(yod, def, _, helper) {
      *
      * @rules () -> Number
      */
-    return helper.prob() ? yod('@Double') : yod('@Integer');
+    return _.prob() ? yod('@Double') : yod('@Integer');
 
   }));
 
@@ -114,7 +114,7 @@ module.exports = function(yod, def, _, helper) {
      */
 
     if (chars[this.pool] && !this.useAsPool) {
-      return helper.sysConfig('character', {category: this.pool});
+      return _.sys('character', {category: this.pool});
     }
 
     return _.sample(this.pool);
@@ -145,23 +145,20 @@ module.exports = function(yod, def, _, helper) {
    ------------------------------------------------------------------*/
 
   function toIntJSDate(key, relative, otherwise) {
-    if (_.isUndefined(key)) { return otherwise; }
-
     key = String(key);
-
     // 1410715640.579, 1410715640, 1410715640579
-    if (/^(\d{10})\.?(\d{1,3})$/.test(key)) {
+    if (/^(\d{10})\.?(\d{1,3})?$/.test(key)) {
       var s = RegExp.$1, ms = RegExp.$2 || 0;
       return (s - 0) * 1000 + (ms - 0);
     } else if (/^-?[\d.]+$/.test(key)) {
       var float = parseFloat(key);
       return _.isNaN(float) ? otherwise : relative + float * 1000;
     } else {
-      var m = moment(key);
-      if (m.isValid()) {
-        return m.valueOf();
+      var d = (new Date(key)).getTime();
+      if (_.isNaN(d)) {
+        return otherwise;
       }
-      return otherwise;
+      return d;
     }
   }
 
@@ -180,16 +177,14 @@ module.exports = function(yod, def, _, helper) {
      * 另外可以在上面所有的方法的参数首位加上 format 参数来指定返回的格式（默认是返回 10 位的 timestamp)，如
      * @Date('YYYY-MM-DD HH:mm:ss', -2)
      *
-     * 格式字符串参考：http://momentjs.com/docs/#/parsing/string-format/
+     * 格式字符串参考：http://momentjs.com/docs/#/displaying/format/
      * @defaults {format: timestamp}
      *
      * @rules ([String format,] [Integer flag = -10, [Nature range]]) -> String
-     * @rules ([String from, [String to]]) -> String
      * @rules ([String format,] String from, String to) -> String
      *
      */
     var from, to, now = new Date().getTime(), oneYearMs = 3600000 * 24 * 365;
-
     if (this.$has('flag')) {
       var flag = this.flag;
       var range = this.$has('range') ? this.range * 1000 : Math.abs(flag || 10) * oneYearMs;

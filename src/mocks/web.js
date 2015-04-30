@@ -6,14 +6,14 @@
  * Licensed under the MIT license.
  */
 
-module.exports = function(yod, def, _, helper) {
+module.exports = function(yod, def, _) {
 
   yod.type('Color', def(function(format) {
 
     var len = 6;
-    if (helper.shortCut(format, 'short')) {
+    if (_.shortCut(format, 'short')) {
       len = 3;
-    } else if (helper.shortCut(format, 'rgb')) {
+    } else if (_.shortCut(format, 'rgb')) {
       return 'rgb(' + _.random(0, 255) + ', ' + _.random(0, 255) + ', ' + _.random(0, 255) + ')';
     }
     return '#' + _.sample('0123456789ABCDEF', len).join('');
@@ -27,7 +27,7 @@ module.exports = function(yod, def, _, helper) {
   }));
 
   yod.type('Email', def(function() {
-    return yod('@First.lower') + (helper.prob(0.5) ? yod('.@Last.lower') : '') + '@' + yod('@Domain');
+    return yod('@First.lower') + (_.prob(0.5) ? yod('.@Last.lower') : '') + '@' + yod('@Domain');
   }));
 
 

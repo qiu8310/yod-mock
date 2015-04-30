@@ -6,7 +6,7 @@
  * Licensed under the MIT license.
  */
 
-module.exports = function(yod, def, _, helper) {
+module.exports = function(yod, def, _) {
 
   yod.modifier(':repeat', def(function() {
     /**
@@ -34,7 +34,7 @@ module.exports = function(yod, def, _, helper) {
     /**
      * 返回指定数组或字符串指定的位置
      *
-     * @rules ( * arg, Integer i ) -> *
+     * @rules ( * arg [, Integer i = 0] ) -> *
      */
     if (_.isArray(this.arg)) {
       return this.arg[this.i];

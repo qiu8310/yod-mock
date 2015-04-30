@@ -6,14 +6,14 @@
  * Licensed under the MIT license.
  */
 
-module.exports = function(yod, def, _, helper) {
+module.exports = function(yod, def, _) {
 
   /*------------------------------------------------------------------
             ---------------  Gender & Sex  ---------------------
    ------------------------------------------------------------------*/
 
   yod.type('Gender', def(function(cate) {
-    return helper.sysConfig('user.gender', {category: cate || 'en'});
+    return _.sys('user.gender', {category: cate || 'en'});
   }), 'Sex');
 
   /*------------------------------------------------------------------
@@ -42,7 +42,7 @@ module.exports = function(yod, def, _, helper) {
    ------------------------------------------------------------------*/
 
 
-  yod.type('Avatar', def(function() { return helper.sysConfig('picture.user'); }));
+  yod.type('Avatar', def(function() { return _.sys('picture.user'); }));
 
 
   /*------------------------------------------------------------------
@@ -51,7 +51,7 @@ module.exports = function(yod, def, _, helper) {
 
   yod.type('First', def(function (gender) {
 
-    return helper.sysConfig('user.first', {category: gender || '*'});
+    return _.sys('user.first', {category: gender || '*'});
 
   }), 'FirstName');
 
@@ -62,7 +62,7 @@ module.exports = function(yod, def, _, helper) {
 
   yod.type('Last', def(function () {
 
-    return helper.sysConfig('user.last');
+    return _.sys('user.last');
 
   }), 'LastName');
 
@@ -88,8 +88,10 @@ module.exports = function(yod, def, _, helper) {
    ------------------------------------------------------------------*/
   yod.type('Name', def(function() {
 
-    return _.sample(yod.config('system.user').family, _.random(1, 2)).join('') +
-      _.sample(yod.config('system.user').giveName, _.random(1, 2)).join('');
+    var name = '';
+    _.times(_.random(1, 2), function() { name += _.sys('user.family'); });
+    _.times(_.random(1, 2), function() { name += _.sys('user.giveName'); });
+    return name;
 
   }), 'ChineseName');
 
@@ -98,7 +100,7 @@ module.exports = function(yod, def, _, helper) {
    ------------------------------------------------------------------*/
   yod.type('Nick', def(function() {
 
-    return _.sample(yod.config('system.user').nick);
+    return _.sys('user.nick');
 
   }), 'NickName');
 
@@ -108,7 +110,7 @@ module.exports = function(yod, def, _, helper) {
    ------------------------------------------------------------------*/
   yod.type('Comment', def(function() {
 
-    return _.sample(yod.config('system.user').comment);
+    return _.sys('user.comment');
 
   }));
 

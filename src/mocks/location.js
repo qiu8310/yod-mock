@@ -6,18 +6,18 @@
  * Licensed under the MIT license.
  */
 
-module.exports = function(yod, def, _, helper) {
+module.exports = function(yod, def, _) {
 
   yod.type('Country', def(function(abbr) {
     return _.sample(yod.config('system.location').country)[abbr ? 1 : 0];
   }));
 
   yod.type('Province', def(function() {
-    return _.sample(yod.config('system.location').region).split(' ').pop();
+    return _.sys('location.region').split(' ').pop();
   }), 'Region');
 
   yod.type('Area', def(function() {
-    return _.sample(yod.config('system.location').area);
+    return _.sys('location.area');
   }));
 
   //yod.type('City', def(function() {}));

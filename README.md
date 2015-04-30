@@ -104,7 +104,7 @@ yod.type('User', {
   nickName: '@Nick',
   chineseName: '@ChineseName',
   age: '@Age(adult)',
-  to100: '` 100 - @Self.age `',
+  to100: '` 100 - @Self.age `',   // 执行 JS 语句
   telephone: '@Tel',
   avatar: '@Avatar',
   others: {
@@ -284,6 +284,8 @@ __另外，modifier 中加了入 [lodash](https://lodash.com/docs) 的所有功�
 
 - 服务器版本，可以使用用户直接访问线上的 URL 就可以生成数据，而不用用户自己搭建一个服务器
 - 语法更宽松，不需要写全 type 或 modifier 就能找到对应的值（支持配置）
+- 生成所有 type 和 modifier 的文档
+- 添加更多 Examples：包括创建 type, modifier，及配置 config
 
 
 ## License

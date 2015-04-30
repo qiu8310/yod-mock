@@ -8,7 +8,7 @@ var paths = {
   lint: ['./gulpfile.js', './src/**/*.js'],
   watch: ['./gulpfile.js', './src/**'].concat(testFiles),
   tests: testFiles,
-  source: ['./src/**/*.js']
+  source: ['./src/**/*.js', './dist.js']
 };
 
 var plumberConf = {};

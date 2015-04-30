@@ -6,16 +6,17 @@
  * Licensed under the MIT license.
  */
 
-module.exports = function(yod, def, _, helper) {
+module.exports = function(yod, def, _) {
 
   yod.type('CW', def(function() {
-    return _.sample(yod.config('system.word').cn);
+    return _.sys('word.cn');
   }));
 
   yod.type('CS', def(function() {
-    var len = yod.config('system.word').cn.length - 20, res = [];
+    var all = yod.config('system.word.cn');
+    var len = all.length - 20, res = [];
     _.times(_.random(1, 4), function() {
-      res.push(yod.config('system.word').cn.substr(_.random(0, len), _.random(8, 20)));
+      res.push(all.substr(_.random(0, len), _.random(8, 20)));
     });
     return res.join('，') + '。';
   }));
@@ -82,11 +83,11 @@ module.exports = function(yod, def, _, helper) {
   }), 'EP');
 
   yod.type('Good', def(function() {
-    return _.sample(yod.config('system.word').good);
+    return _.sys('word.good');
   }));
 
   yod.type('Face', def(function() {
-    return _.sample(yod.config('system.word').face);
+    return _.sys('word.face');
   }));
 
 };
