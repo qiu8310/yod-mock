@@ -1,13 +1,14 @@
 # yod-mock
+
 [![NPM version](https://badge.fury.io/js/yod-mock.svg)](https://npmjs.org/package/yod-mock)
-[![GitHub version][git-tag-image]][project-url]
+[![Build Status][travis-image]][travis-url]
+[![Coverage Status][coveralls-image]][coveralls-url]
+[![Dependency Status][daviddm-url]][daviddm-image]
 
 <!--
-[![Build Status][travis-image]][travis-url]
-[![Dependency Status][daviddm-url]][daviddm-image]
+[![GitHub version][git-tag-image]][project-url]
 [![Inline docs][doc-image]][doc-url]
 [![Code Climate][climate-image]][climate-url]
-[![Coverage Status][coveralls-image]][coveralls-url]
 -->
 
 本项目主要用来在测试环境中生成测试数据用的，另外也可以在命令行上快速生成简单测试数据。
