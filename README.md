@@ -288,6 +288,10 @@ __另外，modifier 中加了入 [lodash](https://lodash.com/docs) 的所有功�
 - 生成所有 type 和 modifier 的文档
 - 添加更多 Examples：包括创建 type, modifier，及配置 config
 
+## History
+
+[ChangeLog](CHANGELOG.md)
+
 
 ## License
 
