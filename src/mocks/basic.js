@@ -35,7 +35,7 @@ module.exports = function(yod, def, _, helper) {
     /**
      * @defaults {min: 0, max: 1, format: '1-4'}
      *
-     * @rules ([Number max, [String format]]) -> string
+     * @rules ([[Number max], [String format]]) -> string
      * @rules (Number min, Number max, [String format]) -> string
      * @rules (Number min, Number max, Number format) -> string
      */
@@ -53,8 +53,9 @@ module.exports = function(yod, def, _, helper) {
     });
 
     result = result.toFixed(_.random(format[0], format[1]));
-    return parseFloat(result);
 
+    // 最后几位如果是 0，精度会丢失
+    return parseFloat(result);
   }), 'Float');
 
 
@@ -82,7 +83,7 @@ module.exports = function(yod, def, _, helper) {
      *
      * @rules () -> Number
      */
-    return helper.prob() ? yod('@Double') : yod('Integer');
+    return helper.prob() ? yod('@Double') : yod('@Integer');
 
   }));
 
@@ -109,13 +110,14 @@ module.exports = function(yod, def, _, helper) {
   // define
   yod.type('Character', def(function() {
     /**
-     * @rules ([String pool = 'alpha' [, Boolean useAsConfigKey = true]]) -> Char
+     * @rules ([String pool = 'alpha' [, Boolean useAsPool = false]]) -> Char
      */
-    if (this.pool && (!chars[this.pool] || !this.useAsConfigKey)) {
-      return _.sample(this.pool);
+
+    if (chars[this.pool] && !this.useAsPool) {
+      return helper.sysConfig('character', {category: this.pool});
     }
 
-    return helper.sysConfig('basic.character', {category: this.pool});
+    return _.sample(this.pool);
 
   }), 'Char');
 
@@ -217,8 +219,9 @@ module.exports = function(yod, def, _, helper) {
 
   yod.type('Range', def(function() {
     /**
-     * @defaults {start: 0, step: 1}
+     * @defaults {start: 0, stop: 10, step: 1}
      *
+     * @rules () -> Array
      * @rules (Integer stop) -> Array
      * @rules (Integer start, Integer stop) -> Array
      * @rules (Integer start, Integer stop, Integer step) -> Array

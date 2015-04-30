@@ -34,7 +34,7 @@ module.exports = function(yod, def, _, helper) {
      * @rules (Integer length) -> String
      * @rules ([ Integer min = 3, Integer max = 10 ]) -> String
      */
-    var length = this.length || _.random(this.min, this.max),
+    var length = this.$has('length') ? this.length : _.random(this.min, this.max),
       consonants = 'bcdfghjklmnprstvwz', // consonants except hard to speak ones
       vowels = 'aeiou', // vowels
       all = consonants + vowels, // all
@@ -68,7 +68,7 @@ module.exports = function(yod, def, _, helper) {
      * @rules ([ Integer min = 12, Integer max = 18 ]) -> String
      */
 
-    return yod('@Word.repeat(%d, " ").cap.', this.length || _.random(this.min, this.max));
+    return yod('@Word.repeat(%d, " ").cap.', this.$has('length') ? this.length : _.random(this.min, this.max));
   }), 'ES');
 
 
@@ -78,7 +78,7 @@ module.exports = function(yod, def, _, helper) {
      * @rules ([ Integer min = 3, Integer max = 7 ]) -> String
      */
 
-    return yod('@Sentence.repeat(%d, " ")', this.length || _.random(this.min, this.max));
+    return yod('@Sentence.repeat(%d, " ")', this.$has('length') ? this.length : _.random(this.min, this.max));
   }), 'EP');
 
   yod.type('Good', def(function() {
