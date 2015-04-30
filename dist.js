@@ -11,7 +11,7 @@ var _yod = require('yod'),
   def = require('elegant.def/src/simple');
 
 var _ = _yod._;
-_.moment = require('moment/min/moment.min.js');
+_.moment = require('moment');
 
 // 设置 def 的默认配置
 def.option('applySelf', true);
