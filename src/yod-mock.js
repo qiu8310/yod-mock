@@ -8,11 +8,10 @@
 
 'use strict';
 var _yod = require('yod'),
-  moment = require('moment'),
   def = require('elegant.def');
 
-
 var _ = _yod._;
+_.moment = require('moment');
 
 // 设置 def 的默认配置
 def.option('applySelf', true);
@@ -37,7 +36,6 @@ function yod(any) {
   return _yod(any);
 }
 
-yod.moment = moment;
 _.assign(yod, _yod);
 
 // 绑定 _ 和 Lodash 到原生的 lodash

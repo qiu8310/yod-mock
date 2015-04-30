@@ -8,11 +8,10 @@
 
 'use strict';
 var _yod = require('yod'),
-  moment = require('moment'),
   def = require('elegant.def/src/simple');
 
-
 var _ = _yod._;
+_.moment = require('moment/min/moment.min.js');
 
 // 设置 def 的默认配置
 def.option('applySelf', true);
@@ -37,7 +36,6 @@ function yod(any) {
   return _yod(any);
 }
 
-yod.moment = moment;
 _.assign(yod, _yod);
 
 // 绑定 _ 和 Lodash 到原生的 lodash
@@ -216,8 +214,6 @@ _.each(_.keys(_), function(key) {
 
 
 
-
-var moment = yod.moment;
 
 /*------------------------------------------------------------------
  ----------------------  Boolean & Bool     -------------------------
@@ -411,7 +407,7 @@ yod.type('Date', def(function() {
   } else if (this.format === 'jsTimestamp') {
     return Math.round(random);
   } else {
-    return moment(random).format(this.format);
+    return _.moment(random).format(this.format);
   }
 }, {"defaults":{"format":"timestamp"},"rules":[["string",[["format","String"],["flag","integer",-10],["range","Nature"]],[[],[1],[1,2],[0],[0,1],[0,1,2]]],["string",[["format","String"],["from","String"],["to","String"]],[[1,2],[0,1,2]]]]}));
 

@@ -8,8 +8,6 @@
 
 module.exports = function(yod, def, _) {
 
-  var moment = yod.moment;
-
   /*------------------------------------------------------------------
    ----------------------  Boolean & Bool     -------------------------
    ------------------------------------------------------------------*/
@@ -202,7 +200,7 @@ module.exports = function(yod, def, _) {
     } else if (this.format === 'jsTimestamp') {
       return Math.round(random);
     } else {
-      return moment(random).format(this.format);
+      return _.moment(random).format(this.format);
     }
   }));
 

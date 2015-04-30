@@ -14,6 +14,7 @@ var rootDir = path.join(__dirname, '..');
 var srcDir = path.join(rootDir, 'src');
 var dataDir = path.join(srcDir, 'data');
 
+var isBrowser = process.argv[2] === 'browser';
 var data = {};
 
 fs.readdirSync(dataDir).forEach(function (name) {
@@ -24,6 +25,21 @@ fs.readdirSync(dataDir).forEach(function (name) {
 var dataSource = 'yod.config(\'system\', ' + JSON.stringify(data) + ');';
 
 var all = fs.readFileSync(srcDir + '/yod-mock.js').toString().replace('elegant.def', 'elegant.def/src/simple');
+
+if (isBrowser) {
+
+  all = all.replace(/require\(["'](moment[^'"]*)(['"])\)/, function(raw, momentPath) {
+    var momentSrc = fs.readFileSync(require.resolve(momentPath)).toString();
+
+    // 去掉 require("./locale/"+a)
+    fs.writeFileSync(
+      path.join(rootDir, 'moment.js'),
+      momentSrc.replace(/require\([^\)]+\)/, '')
+    );
+
+    return raw.replace(momentPath, './moment.js');
+  });
+}
 
 all = all.replace(/\/\*.*?build_delete_start.*\*\/([\s\S]*?)\/\*.*?build_delete_end.*\*\//, function(r, c) {
   var file, s, m, re = /\/(useful|modifiers|mocks)\/([\w-]+)/g, sub = [dataSource];
@@ -37,6 +53,7 @@ all = all.replace(/\/\*.*?build_delete_start.*\*\/([\s\S]*?)\/\*.*?build_delete_
   return sub.join('\n');
 });
 
-all += process.argv[2] === 'browser' ? 'if (typeof window !== \'undefined\') { window.yod = yod; }' : '';
 
-fs.writeFileSync(path.join(rootDir, 'dist.js'), all);
+all += isBrowser ? 'if (typeof window !== \'undefined\') { window.yod = yod; }' : '';
+
+fs.writeFileSync(path.join(rootDir, isBrowser ? 'page.js' : 'dist.js'), all);
