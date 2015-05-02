@@ -40,6 +40,7 @@ describe('yod useful helper', function() {
         c: ['c1', 'c2', 'c3'],
         d: 123,
         e: true,
+        f: 'ab-{{range:001-099}}-{{range:1-100}}',
         s: 's123'
       };
       obj.c.prefix = 'pre-';
@@ -64,7 +65,10 @@ describe('yod useful helper', function() {
     });
 
     it('should support range string', function() {
-      _.sys('test.sys.a').should.match(/^ab-\d+$/);
+      _.times(5, function() {
+        _.sys('test.sys.a').should.match(/^ab-\d{1,2}$/);
+        _.sys('test.sys.f').should.match(/^ab-\d{3}-\d{1,3}$/);
+      });
     });
 
     it('should should return original value if it is not string, array, object', function() {

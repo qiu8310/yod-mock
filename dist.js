@@ -123,9 +123,15 @@ _.mixin({
     // http://abc.com/{{range:1-20}}.mp3 => http://abc.com/4.mp3
     if ( _.isString(val)) {
       var isRanged = false;
-      val = val.replace(/\{\{range:(\d+)\-(\d+)\}\}/, function(raw, from, to) {
+      val = val.replace(/\{\{range:(\d+)\-(\d+)\}\}/g, function(raw, from, to) {
         isRanged = true;
-        return _.random(parseInt(from, 10), parseInt(to, 10));
+        var res = String(_.random(parseInt(from, 10), parseInt(to, 10)));
+
+        // 如果使用了  {{range:001-221}} 这种结构
+        if (res.length < from.length) {
+          res = _.repeat(from.charAt(0), from.length - res.length) + res;
+        }
+        return res;
       });
 
       if (isRanged) { return val; }
