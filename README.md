@@ -274,7 +274,7 @@ __另外，modifier 中加了入 [lodash](https://lodash.com/docs) 的所有功�
 ## 引用
 
 * [yod][yod]：本项目的核心引擎（我写的）。
-* [mockjs](http://mockjs.com/#)：阿里出的，也不错，但学习成功较高，也不够强大。
+* [mockjs](http://mockjs.com/#)：阿里出的，也不错，但学习成本较高，也不够强大。
 * [chance](http://chancejs.com/)：国外的一个 mock 库，代码很简洁，但不适合中国人用。
 * [jsonfy](http://github.com/qiu8310/jsonfy)：将任意的字符串解析成 JS 里的数据，类似于 JSON.parse，但语法要求没它那么严格（我写的）。
 * [sscan](http://github.com/qiu8310/sscan)：字符串分析器，很多复杂的解析用正则表达式是满足不了要求的，所以需要把字符串化分成字符来一个个解析（我写的）。
@@ -287,6 +287,9 @@ __另外，modifier 中加了入 [lodash](https://lodash.com/docs) 的所有功�
 - 语法更宽松，不需要写全 type 或 modifier 就能找到对应的值（支持配置）
 - 生成所有 type 和 modifier 的文档
 - 添加更多 Examples：包括创建 type, modifier，及配置 config
+- 发现已经有人写了服务器版本 [thx/RAP](https://github.com/thx/RAP)，值得学习下
+- 设计服务端时也可以参考 [https://readme.io/](https://readme.io/)
+- 国外有一个 [marak/Faker.js](https://github.com/marak/Faker.js/) 也和 mockjs、chance 类似，可以参考
 
 ## History
 
