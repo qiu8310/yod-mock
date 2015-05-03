@@ -12,9 +12,9 @@ module.exports = function(yod, def, _) {
             ---------------  Gender & Sex  ---------------------
    ------------------------------------------------------------------*/
 
-  yod.type('Gender', def(function(cate) {
+  yod.type('Gender & Sex', def(function(cate) {
     return _.sys('user.gender', {category: cate || 'en'});
-  }), 'Sex');
+  }));
 
   /*------------------------------------------------------------------
               ---------------  Age  ---------------------
@@ -49,22 +49,22 @@ module.exports = function(yod, def, _) {
           ---------------  First & FirstName  ---------------------
    ------------------------------------------------------------------*/
 
-  yod.type('First', def(function (gender) {
+  yod.type('First & FirstName', def(function (gender) {
 
     return _.sys('user.first', {category: gender || '*'});
 
-  }), 'FirstName');
+  }));
 
 
   /*------------------------------------------------------------------
           ---------------  Last & LastName  ---------------------
    ------------------------------------------------------------------*/
 
-  yod.type('Last', def(function () {
+  yod.type('Last & LastName', def(function () {
 
     return _.sys('user.last');
 
-  }), 'LastName');
+  }));
 
 
   /*------------------------------------------------------------------
@@ -86,23 +86,23 @@ module.exports = function(yod, def, _) {
   /*------------------------------------------------------------------
         ---------------  Name & ChineseName  ---------------------
    ------------------------------------------------------------------*/
-  yod.type('Name', def(function() {
+  yod.type('Name & ChineseName', def(function() {
 
     var name = '';
     _.times(_.random(1, 2), function() { name += _.sys('user.family'); });
     _.times(_.random(1, 2), function() { name += _.sys('user.giveName'); });
     return name;
 
-  }), 'ChineseName');
+  }));
 
   /*------------------------------------------------------------------
           ---------------  Nick & NickName  ---------------------
    ------------------------------------------------------------------*/
-  yod.type('Nick', def(function() {
+  yod.type('Nick & NickName', def(function() {
 
     return _.sys('user.nick');
 
-  }), 'NickName');
+  }));
 
 
   /*------------------------------------------------------------------
@@ -118,13 +118,10 @@ module.exports = function(yod, def, _) {
   /*------------------------------------------------------------------
         ---------------  Telephone & Tel  ---------------------
    ------------------------------------------------------------------*/
-  yod.type('Telephone', def(function() {
+  yod.type('Telephone & Tel', def(function() {
 
     return '1' + _.sample([3, 4, 5, 7, 8]) + _.times(9, function() { return _.random(0, 9); }).join('');
 
-  }), 'Tel');
-
-
-
+  }));
 
 };

@@ -12,7 +12,7 @@ module.exports = function(yod, def, _) {
    ----------------------  Boolean & Bool     -------------------------
    ------------------------------------------------------------------*/
 
-  yod.type('Boolean', def(function() {
+  yod.type('Boolean & Bool', def(function() {
     /**
      * 生成一个布尔值
      *
@@ -22,14 +22,14 @@ module.exports = function(yod, def, _) {
 
     return _.prob(this.$has('probability') ? this.probability : this.percentage);
 
-  }), 'Bool');
+  }));
 
 
   /*------------------------------------------------------------------
    ----------------------  Double & Float  -------------------------
    ------------------------------------------------------------------*/
 
-  yod.type('Double', def(function() {
+  yod.type('Double & Float', def(function() {
     /**
      * @defaults {min: 0, max: 1, format: '1-4'}
      *
@@ -54,7 +54,7 @@ module.exports = function(yod, def, _) {
 
     // 最后几位如果是 0，精度会丢失
     return parseFloat(result);
-  }), 'Float');
+  }));
 
 
 
@@ -62,14 +62,14 @@ module.exports = function(yod, def, _) {
    ----------------------  Integer & Int     -------------------------
    ------------------------------------------------------------------*/
 
-  yod.type('Integer', def(function() {
+  yod.type('Integer & Int', def(function() {
     /**
      * 生成一个从 min 到 max 之间的整数（包括 min 和 max）
      *
      * @rules ([[Integer min = 0, ] Integer max = 1000]) -> Integer
      */
     return _.random(this.min, this.max);
-  }), 'Int');
+  }));
 
 
   /*------------------------------------------------------------------
@@ -106,7 +106,7 @@ module.exports = function(yod, def, _) {
   yod.config('system.character', chars, {category: 'alpha'});
 
   // define
-  yod.type('Character', def(function() {
+  yod.type('Character & Char', def(function() {
     /**
      * @rules ([String pool = 'alpha' [, Boolean useAsPool = false]]) -> Char
      */
@@ -117,14 +117,14 @@ module.exports = function(yod, def, _) {
 
     return _.sample(this.pool);
 
-  }), 'Char');
+  }));
 
 
   /*------------------------------------------------------------------
    ----------------------  String & Str      -------------------------
    ------------------------------------------------------------------*/
 
-  yod.type('String', def(function() {
+  yod.type('String & Str', def(function() {
     /**
      * @defaults {min: 2, max: 20}
      *
@@ -135,7 +135,7 @@ module.exports = function(yod, def, _) {
     var length = this.$has('length') ? this.length : _.random(this.min, this.max);
 
     return yod('@Char("%s", true).repeat(%d, "")', this.pool, length);
-  }), 'Str');
+  }));
 
 
   /*------------------------------------------------------------------
@@ -230,7 +230,7 @@ module.exports = function(yod, def, _) {
    ------------------------------------------------------------------*/
 
   var seqSeeds = {};
-  yod.type('Sequence', def(function() {
+  yod.type('Sequence & Seq & Id', def(function() {
     /**
      * @rules ([String seed = '_d'], [Integer start = 1 [, Integer step = 1]]) -> int
      */
@@ -243,14 +243,14 @@ module.exports = function(yod, def, _) {
     seqSeeds[this.seed] += this.step;
     return seqSeeds[this.seed];
 
-  }), 'Seq', 'Id');
+  }));
 
 
   /*------------------------------------------------------------------
    ------------------ Guid & GUID & Uuid & UUID ----------------------
    ------------------------------------------------------------------*/
 
-  yod.type('Guid', def(function() {
+  yod.type('Guid & GUID & Uuid & UUID', def(function() {
     /**
      * @format xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx
      *    x is replaced with a random hexadecimal digit from 0 to f
@@ -268,13 +268,13 @@ module.exports = function(yod, def, _) {
     });
     /* jshint ignore:end */
 
-  }), 'GUID', 'Uuid', 'UUID');
+  }));
 
 
   /*------------------------------------------------------------------
    ----------------------  Objectid & Oid    -------------------------
    ------------------------------------------------------------------*/
-  yod.type('Objectid', def(function() {
+  yod.type('Objectid & Oid', def(function() {
 
     /**
      * Mongo 的 id
@@ -284,14 +284,14 @@ module.exports = function(yod, def, _) {
 
     return yod('@Char(hash).repeat(24, "")');
 
-  }), 'Oid');
+  }));
 
 
   /*------------------------------------------------------------------
    ----------------------  Md5 & MD5    -------------------------
    ------------------------------------------------------------------*/
 
-  yod.type('Md5', def(function() {
+  yod.type('Md5 & MD5', def(function() {
 
     /**
      * 生成 md5 字符串
@@ -301,6 +301,6 @@ module.exports = function(yod, def, _) {
 
     return yod('@Char(hash).repeat(32, "")');
 
-  }), 'MD5');
+  }));
 };
 

@@ -8,10 +8,17 @@
 
 module.exports = function(yod, def, _) {
 
+  /*------------------------------------------------------------------
+   ----------------------  CW     -------------------------
+   ------------------------------------------------------------------*/
   yod.type('CW', def(function() {
     return _.sys('word.cn');
   }));
 
+
+  /*------------------------------------------------------------------
+   ----------------------  CS     -------------------------
+   ------------------------------------------------------------------*/
   yod.type('CS', def(function() {
     var all = yod.config('system.word.cn');
     var len = all.length - 20, res = [];
@@ -21,6 +28,10 @@ module.exports = function(yod, def, _) {
     return res.join('，') + '。';
   }));
 
+
+  /*------------------------------------------------------------------
+   ----------------------  CP     -------------------------
+   ------------------------------------------------------------------*/
   yod.type('CP', def(function() {
     /**
      * @rules (Integer length) -> String
@@ -30,7 +41,10 @@ module.exports = function(yod, def, _) {
   }));
 
 
-  yod.type('Word', def(function() {
+  /*------------------------------------------------------------------
+   ----------------------  Word & EW     -------------------------
+   ------------------------------------------------------------------*/
+  yod.type('Word & EW', def(function() {
     /**
      * @rules (Integer length) -> String
      * @rules ([ Integer min = 3, Integer max = 10 ]) -> String
@@ -59,33 +73,50 @@ module.exports = function(yod, def, _) {
     }
 
     return text;
-  }), 'EW');
+  }));
 
+
+  /*------------------------------------------------------------------
+   ----------------------  Sentence & ES    -------------------------
+   ------------------------------------------------------------------*/
   // Could get smarter about this than generating random words and
   // chaining them together. Such as: http://vq.io/1a5ceOh
-  yod.type('Sentence', def(function() {
+  yod.type('Sentence & ES', def(function() {
     /**
      * @rules (Integer length) -> String
      * @rules ([ Integer min = 12, Integer max = 18 ]) -> String
      */
 
     return yod('@Word.repeat(%d, " ").cap.', this.$has('length') ? this.length : _.random(this.min, this.max));
-  }), 'ES');
+  }));
 
 
-  yod.type('Paragraph', def(function() {
+  /*------------------------------------------------------------------
+   ----------------------  Paragraph & EP     -------------------------
+   ------------------------------------------------------------------*/
+  yod.type('Paragraph & EP', def(function() {
     /**
      * @rules (Integer length) -> String
      * @rules ([ Integer min = 3, Integer max = 7 ]) -> String
      */
 
     return yod('@Sentence.repeat(%d, " ")', this.$has('length') ? this.length : _.random(this.min, this.max));
-  }), 'EP');
+  }));
+
+
+
+  /*------------------------------------------------------------------
+   ----------------------  Good    -------------------------
+   ------------------------------------------------------------------*/
 
   yod.type('Good', def(function() {
     return _.sys('word.good');
   }));
 
+
+  /*------------------------------------------------------------------
+   ----------------------  Face     -------------------------
+   ------------------------------------------------------------------*/
   yod.type('Face', def(function() {
     return _.sys('word.face');
   }));

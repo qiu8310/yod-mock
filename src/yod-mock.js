@@ -38,9 +38,16 @@ function yod(any) {
 
 _.assign(yod, _yod);
 
-// 绑定 _ 和 Lodash 到原生的 lodash
-yod.type('Lodash', function() { return _.apply(_, arguments); }, '_');
 
+// 重新定义 yod.type
+yod.type = function(keys, fn) {
+  keys = _.trim(keys).split(/\s*&\s*/);
+  return _yod.type(keys.shift(), fn, keys);
+};
+
+
+// 绑定 _ 和 Lodash 到原生的 lodash
+yod.type('Lodash & _', function() { return _.apply(_, arguments); });
 
 /****** build_delete_start ******/
 var path = require('path');
