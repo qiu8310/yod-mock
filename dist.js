@@ -119,14 +119,26 @@ _.mixin({
     var data = yod.config('system.' + key + ':meta');
     var val = data.val, meta = data.meta || {};
     opts = opts || {};
-    var isObj = _.isPlainObject(val);
-    var cate = isObj && (opts.category || meta.category), cates = isObj && _.keys(val);
-    if (cate || cates.length) {
-      if (!_.isString(cate) || !val[cate]) {
+
+    if (_.isPlainObject(val)) {
+      var cate = opts.category || meta.category, cates = _.keys(val);
+
+      // 空对象，如果指定了 cate 则抛出异常，如果没指定，则直接返回本身
+      if (!cates.length) {
+        if (cate) {
+          throw new Error('The config for "' + key + '" is an empty object.');
+        } else {
+          return val;
+        }
+      }
+
+      if (!_.isString(cate) || !(cate in val)) {
         cate = shortCut(cate, cates) || _.sample(cates);
       }
+
       val = val[cate];
     }
+
     // http://abc.com/{{range:1-20}}.mp3 => http://abc.com/4.mp3
     if ( _.isString(val)) {
       var isRanged = false;
@@ -141,15 +153,11 @@ _.mixin({
         return res;
       });
 
-      if (isRanged) { return val; }
+      return isRanged ? val : _.sample(val);
     }
 
     if (_.isArray(val)) {
       return (val.prefix || '') + _.sample(val) + (val.postfix || '');
-    }
-
-    if (_.isString(val)) {
-      return _.sample(val);
     }
 
     return val;

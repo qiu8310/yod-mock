@@ -41,6 +41,7 @@ describe('yod useful helper', function() {
         d: 123,
         e: true,
         f: 'ab-{{range:001-099}}-{{range:1-100}}',
+        t: {},
         s: 's123'
       };
       obj.c.prefix = 'pre-';
@@ -69,6 +70,15 @@ describe('yod useful helper', function() {
         _.sys('test.sys.a').should.match(/^ab-\d{1,2}$/);
         _.sys('test.sys.f').should.match(/^ab-\d{3}-\d{1,3}$/);
       });
+    });
+
+    it('should support config category', function() {
+      _.sys('test.sys.s', {category: '*'}).should.match(/^[s123]$/);
+    });
+
+    it('should throws when config is an empty object and with category', function() {
+      assert.deepEqual(_.sys('test.sys.t'), {});
+      (function() { _.sys('test.sys.t', {category: '*'}); }).should.throw(/is an empty object/);
     });
 
     it('should should return original value if it is not string, array, object', function() {
