@@ -1,10 +1,8 @@
 ## [basic.js](src/mocks/basic.js)
 
-### [Boolean](src/mocks/basic.js#L11-30)
+### [Boolean & Bool](src/mocks/basic.js#L11-30)
 
 Generate a random boolean value.
-
-__Alias:__ `Bool`
 
 __Rules:__ 
 
@@ -25,13 +23,11 @@ __Examples:__
 
 
 
-### [Double](src/mocks/basic.js#L32-72)
+### [Double & Float](src/mocks/basic.js#L32-72)
 
 Generate a random float value.
 
 __Note: when you specified format to `2`, you may get a random value `0.10`, and the last `0` will be ignored, so you will get `0.1` eventually.__
-
-__Alias:__ `Float`
 
 __Rules:__ 
 
@@ -56,11 +52,9 @@ __Examples:__
 
 
 
-### [Integer](src/mocks/basic.js#L76-92)
+### [Integer & Int](src/mocks/basic.js#L76-92)
 
 Generate a random integer between `min` to `max` (include `min` and `max`).
-
-__Alias:__ `Int`
 
 __Rules:__ 
 
@@ -92,7 +86,7 @@ __Rules:__
 
 
 
-### [Character](src/mocks/basic.js#L125-152)
+### [Character & Char](src/mocks/basic.js#L125-152)
 
 Generate a random character.
 
@@ -100,8 +94,6 @@ Available pre-defined pools: `vowel`, `hash`, `consonant`, `lower`, `upper`, `nu
 
 - If parameter `pool` not in pre-defined pools, then itself will become a characters pool.
 - You can set `useAsPool` to `true` to force pre-defined pool key words to become a normal characters pool.
-
-__Alias:__ `Char`
 
 __Rules:__ 
 
@@ -121,15 +113,13 @@ __Examples:__
 
 
 
-### [String](src/mocks/basic.js#L155-175)
+### [String & Str](src/mocks/basic.js#L155-175)
 
 Generate a random string.
 
 - you can specified the string's character generate pool
 - you can specified string length by setting `length` argument
 - you can set `min` and `max` to get a random length string which length is between `min` to `max`
-
-__Alias:__ `Str`
 
 __Rules:__ 
 
@@ -192,11 +182,9 @@ __Rules:__
 
 
 
-### [Id](src/mocks/basic.js#L268-287)
+### [Id & Sequence & Seq](src/mocks/basic.js#L268-287)
 
 Generate a rand auto increment id.
-
-__Alias:__ `Sequence`, `Seq`
 
 __Rules:__ 
 
@@ -210,7 +198,7 @@ __Rules:__
 
 
 
-### [Guid](src/mocks/basic.js#L292-318)
+### [Guid & GUID & Uuid & UUID](src/mocks/basic.js#L292-318)
 
 Generate a random [guid](http://zh.wikipedia.org/wiki/%E5%85%A8%E5%B1%80%E5%94%AF%E4%B8%80%E6%A0%87%E8%AF%86%E7%AC%A6)
 
@@ -219,8 +207,6 @@ __format: xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx__
    - x is replaced with a random hexadecimal digit from 0 to f
    - y is replaced with a random hexadecimal digit from 8 to b
 
-__Alias:__ `GUID`, `Uuid`, `UUID`
-
 __Rules:__ 
 
   - `() -> string`
@@ -228,12 +214,10 @@ __Rules:__
 
 
 
-### [Objectid](src/mocks/basic.js#L321-334)
+### [Objectid & ObjectId & Oid](src/mocks/basic.js#L321-334)
 
 Generate a random [object id](http://docs.mongodb.org/manual/reference/object-id/)
 
-__Alias:__ `ObjectId`, `Oid`
-
 __Rules:__ 
 
   - `() -> string`
@@ -241,11 +225,9 @@ __Rules:__
 
 
 
-### [Md5](src/mocks/basic.js#L338-350)
+### [Md5 & MD5](src/mocks/basic.js#L338-350)
 
 Generate a random md5 encrypted value.
-
-__Alias:__ `MD5`
 
 __Rules:__ 
 
@@ -272,13 +254,11 @@ __Rules:__
 
 
 
-### [Province](src/mocks/location.js#L27-38)
+### [Province & Region](src/mocks/location.js#L27-38)
 
 Generate a random province in China
 
 _Using config `system.location.region`_
-
-__Alias:__ `Region`
 
 __Rules:__ 
 
@@ -307,6 +287,7 @@ Generate a random latitude float value
 __Rules:__ 
 
   - `() -> float`
+  - `(int min = -90, int max = 90) -> float`
   - `(int fixed = 5) -> float`
   - `(int fixed = 5, int min = -90, int max = 90) -> float`
 
@@ -320,6 +301,7 @@ Generate a random longitude float value
 __Rules:__ 
 
   - `() -> float`
+  - `(int min = -180, int max = 180) -> float`
   - `(int fixed = 5) -> float`
   - `(int fixed = 5, int min = -180, int max = 180) -> float`
 
@@ -339,14 +321,12 @@ __Rules:__
 
 ## [media.js](src/mocks/media.js)
 
-### [Image](src/mocks/media.js#L12-26)
+### [Image & Img & Picture & Pic](src/mocks/media.js#L12-26)
 
 Generate a random image url
 
 _Using config `system.picture`_
 
-__Alias:__ `Img`, `Picture`, `Pic`
-
 __Rules:__ 
 
   - `() -> string`
@@ -355,14 +335,12 @@ __Rules:__
 
 
 
-### [Audio](src/mocks/media.js#L31-46)
+### [Audio & Mp3 & MP3](src/mocks/media.js#L31-46)
 
 Generate a random audio url
 
 _Using config `system.audio`_
 
-__Alias:__ `Mp3`, `MP3`
-
 __Rules:__ 
 
   - `() -> string`
@@ -371,13 +349,11 @@ __Rules:__
 
 
 
-### [Video](src/mocks/media.js#L51-67)
+### [Video & Mp4 & MP4](src/mocks/media.js#L51-67)
 
 Generate a random video url
 
 _Using config `system.video`_
-
-__Alias:__ `Mp4`, `MP4`
 
 __Rules:__ 
 
@@ -454,11 +430,9 @@ __Rules:__
 
 
 
-### [Word](src/mocks/text.js#L61-95)
+### [Word & EW](src/mocks/text.js#L61-95)
 
 Generate a random english word
-
-__Alias:__ `EW`
 
 __Rules:__ 
 
@@ -469,11 +443,9 @@ __Rules:__
 
 
 
-### [Sentence](src/mocks/text.js#L101-114)
+### [Sentence & ES](src/mocks/text.js#L101-114)
 
 Generate a random english sentence
-
-__Alias:__ `ES`
 
 __Rules:__ 
 
@@ -484,11 +456,9 @@ __Rules:__
 
 
 
-### [Paragraph](src/mocks/text.js#L117-129)
+### [Paragraph & EP](src/mocks/text.js#L117-129)
 
 Generate a random english paragraph
-
-__Alias:__ `EP`
 
 __Rules:__ 
 
@@ -527,15 +497,13 @@ __Rules:__
 
 ## [user.js](src/mocks/user.js)
 
-### [Gender](src/mocks/user.js#L12-26)
+### [Gender & Sex](src/mocks/user.js#L12-26)
 
 Generate a random gender string
 
 - `category` can be `'zh'`, `'en'` and `'short'`
 
 _Using config `system.user.gender`_
-
-__Alias:__ `Sex`
 
 __Rules:__ 
 
@@ -570,15 +538,13 @@ __Rules:__
 
 
 
-### [First](src/mocks/user.js#L68-84)
+### [First & FirstName](src/mocks/user.js#L68-84)
 
 Generate a random first name
 
 - `gender` can be `'male'` or `'female'`
 
 _Using config `system.user.first`_
-
-__Alias:__ `FirstName`
 
 __Rules:__ 
 
@@ -588,13 +554,11 @@ __Rules:__
 
 
 
-### [Last](src/mocks/user.js#L88-103)
+### [Last & LastName](src/mocks/user.js#L88-103)
 
 Generate a random last name
 
 _Using config `system.user.last`_
-
-__Alias:__ `LastName`
 
 __Rules:__ 
 
@@ -603,11 +567,9 @@ __Rules:__
 
 
 
-### [UserName](src/mocks/user.js#L106-120)
+### [UserName & Username](src/mocks/user.js#L106-120)
 
 Generate a random username
-
-__Alias:__ `Username`
 
 __Rules:__ 
 
@@ -620,11 +582,9 @@ __Rules:__
 
 
 
-### [Name](src/mocks/user.js#L123-137)
+### [Name & ChineseName](src/mocks/user.js#L123-137)
 
 Generate a random chinese name
-
-__Alias:__ `ChineseName`
 
 __Rules:__ 
 
@@ -633,13 +593,11 @@ __Rules:__
 
 
 
-### [Nick](src/mocks/user.js#L140-153)
+### [Nick & NickName & Nickname](src/mocks/user.js#L140-153)
 
 Generate a random nickname
 
 _Using config `system.user.nick`_
-
-__Alias:__ `NickName`, `Nickname`
 
 __Rules:__ 
 
@@ -661,13 +619,11 @@ __Rules:__
 
 
 
-### [Telephone](src/mocks/user.js#L173-227)
+### [Telephone & Tel](src/mocks/user.js#L173-227)
 
 Generate a random telephone
 
 - `country` can be `'fr'`, `'uk'`, `'us'`, default is `'zh'`
-
-__Alias:__ `Tel`
 
 __Rules:__ 
 
@@ -725,11 +681,9 @@ __Rules:__
 
 
 
-### [Ip](src/mocks/web.js#L62-72)
+### [Ip & IP](src/mocks/web.js#L62-72)
 
 Generate a random ip
-
-__Alias:__ `IP`
 
 __Rules:__ 
 
@@ -738,11 +692,9 @@ __Rules:__
 
 
 
-### [Ipv6](src/mocks/web.js#L75-86)
+### [Ipv6 & IPv6 & IPV6](src/mocks/web.js#L75-86)
 
 Generate a random ipv6
-
-__Alias:__ `IPv6`, `IPV6`
 
 __Rules:__ 
 

@@ -63,7 +63,7 @@ module.exports = function(yod, def, _) {
      *
      * @name Latitude
      *
-     * @rule ([Int fixed = 5, [Int min = -90, Int max = 90]]) -> Float
+     * @rule ([Int fixed = 5], [Int min = -90, Int max = 90]) -> Float
      */
     return yod('@Float(%d, %d, "%s")', this.min, this.max, this.fixed);
 
@@ -76,7 +76,7 @@ module.exports = function(yod, def, _) {
      * Generate a random longitude float value
      *
      * @name Longitude
-     * @rule ([Int fixed = 5, [Int min = -180, Int max = 180]]) -> Float
+     * @rule ([Int fixed = 5], [Int min = -180, Int max = 180]) -> Float
      */
     return yod('@Float(%d, %d, "%s")', this.min, this.max, this.fixed);
   }));

@@ -1153,11 +1153,11 @@ yod.type('Latitude', def(function() {
    *
    * @name Latitude
    *
-   * @rule ([Int fixed = 5, [Int min = -90, Int max = 90]]) -> Float
+   * @rule ([Int fixed = 5], [Int min = -90, Int max = 90]) -> Float
    */
   return yod('@Float(%d, %d, "%s")', this.min, this.max, this.fixed);
 
-}, {"rules":[["float",[["fixed","int",5],["min","int",-90],["max","int",90]],[[],[0],[0,1,2]]]],"names":["Latitude"]}));
+}, {"rules":[["float",[["fixed","int",5],["min","int",-90],["max","int",90]],[[],[1,2],[0],[0,1,2]]]],"names":["Latitude"]}));
 
 
 
@@ -1166,10 +1166,10 @@ yod.type('Longitude', def(function() {
    * Generate a random longitude float value
    *
    * @name Longitude
-   * @rule ([Int fixed = 5, [Int min = -180, Int max = 180]]) -> Float
+   * @rule ([Int fixed = 5], [Int min = -180, Int max = 180]) -> Float
    */
   return yod('@Float(%d, %d, "%s")', this.min, this.max, this.fixed);
-}, {"rules":[["float",[["fixed","int",5],["min","int",-180],["max","int",180]],[[],[0],[0,1,2]]]],"names":["Longitude"]}));
+}, {"rules":[["float",[["fixed","int",5],["min","int",-180],["max","int",180]],[[],[1,2],[0],[0,1,2]]]],"names":["Longitude"]}));
 
 
 
