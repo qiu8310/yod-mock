@@ -52,6 +52,7 @@
     "should": "^6.0.1"
   },
   "scripts": {
+    "readme": "node tools/readme.js",
     "page": "node tools/build.js browser && webpack page.js --output-file='browser/yod-mock.js' && webpack page.js -p --output-file='browser/yod-mock.min.js' && cp browser/yod* gh-pages && rm moment.js page.js",
     "coveralls": "gulp test && cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "test": "node tools/build.js && gulp test",

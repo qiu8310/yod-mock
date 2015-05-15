@@ -132,147 +132,116 @@ console.log(yod({
 _此项目只是在 [yod][yod] 项目基础上定义了一些常用的 type 和 modifier。(type 和 modifier 的细节可以在 [yod][yod] 项目中查看)_
 
 
-### Types
+## [Types](./API_TYPES.md)
 
-__有太多 types 了，我不想一个个写它的参数，其实用法都很简单；
-我下面只写出支持的 types 名称，具体支持哪些参数可以去看[源代码](https://github.com/qiu8310/yod-mock/tree/master/src/mocks)__
+<!-- API_TYPES START -->
 
 
-#### 只想在最上面特别说明下 `Date` 类型：
+### BASIC
 
-<table>
-<tr><td>@Date()</td><td>过去10年的随机 timestamp</td></tr>
-<tr><td>@Date(0)</td><td>过去10年到未来10年之间的一个 timestamp</td></tr>
-<tr><td>@Date(-2)</td><td>过去两年的随机 timestamp</td></tr>
-<tr><td>@Date(3)</td><td>将来三年的随机 timestamp</td></tr>
-<tr><td>@Date(-1, 3600)</td><td>过去 3600 分（即过去一小时）间的随机 timestamp</td></tr>
-<tr><td>@Date("2011-1-1", "2011-12-31 23:59:59")</td><td>2011-1-1 00:00:00 到 2011-12-31 23:59:59 之间的随机数据</td></tr>
-</table>
+* [Boolean & Bool](API_TYPES.md#boolean--bool)
+* [Double & Float](API_TYPES.md#double--float)
+* [Integer & Int](API_TYPES.md#integer--int)
+* [Number](API_TYPES.md#number)
+* [Character & Char](API_TYPES.md#character--char)
+* [String & Str](API_TYPES.md#string--str)
+* [Date](API_TYPES.md#date)
+* [Range](API_TYPES.md#range)
+* [Id & Sequence & Seq](API_TYPES.md#id--sequence--seq)
+* [Guid & GUID & Uuid & UUID](API_TYPES.md#guid--guid--uuid--uuid)
+* [Objectid & ObjectId & Oid](API_TYPES.md#objectid--objectid--oid)
+* [Md5 & MD5](API_TYPES.md#md5--md5)
 
-__上面所有生成的都是 10 位的 Unix 时间戳，这是我们在接口中常用的格式，如果你想输出其它格式，
-可以在 `Date` 的第一个参数上加上格式字符串，所有支持的格式在这：[moment#format](http://momentjs.com/docs/#/displaying/format/)__
+### LOCATION
 
-```javascript
-@Date('YYYY-MM-DD HH:mm:ss', -2); // 将生成一个像 "2014-05-12 21:04:19" 一样的字符串
+* [Country](API_TYPES.md#country)
+* [Province & Region](API_TYPES.md#province--region)
+* [Area](API_TYPES.md#area)
+* [Latitude](API_TYPES.md#latitude)
+* [Longitude](API_TYPES.md#longitude)
+* [Coordinates](API_TYPES.md#coordinates)
+
+### MEDIA
+
+* [Image & Img & Picture & Pic](API_TYPES.md#image--img--picture--pic)
+* [Audio & Mp3 & MP3](API_TYPES.md#audio--mp3--mp3)
+* [Video & Mp4 & MP4](API_TYPES.md#video--mp4--mp4)
+
+### MIXED
+
+* [CarType](API_TYPES.md#cartype)
+* [CarImage](API_TYPES.md#carimage)
+
+### TEXT
+
+* [CW](API_TYPES.md#cw)
+* [CS](API_TYPES.md#cs)
+* [CP](API_TYPES.md#cp)
+* [Word & EW](API_TYPES.md#word--ew)
+* [Sentence & ES](API_TYPES.md#sentence--es)
+* [Paragraph & EP](API_TYPES.md#paragraph--ep)
+* [Good](API_TYPES.md#good)
+* [Face](API_TYPES.md#face)
+
+### USER
+
+* [Gender & Sex](API_TYPES.md#gender--sex)
+* [Age](API_TYPES.md#age)
+* [Avatar](API_TYPES.md#avatar)
+* [First & FirstName](API_TYPES.md#first--firstname)
+* [Last & LastName](API_TYPES.md#last--lastname)
+* [UserName & Username](API_TYPES.md#username--username)
+* [Name & ChineseName](API_TYPES.md#name--chinesename)
+* [Nick & NickName & Nickname](API_TYPES.md#nick--nickname--nickname)
+* [Comment](API_TYPES.md#comment)
+* [Telephone & Tel](API_TYPES.md#telephone--tel)
+
+### WEB
+
+* [Color](API_TYPES.md#color)
+* [Domain](API_TYPES.md#domain)
+* [Email](API_TYPES.md#email)
+* [Ip & IP](API_TYPES.md#ip--ip)
+* [Ipv6 & IPv6 & IPV6](API_TYPES.md#ipv6--ipv6--ipv6)
+
+<!-- API_TYPES END -->
+
+
+
+## [Modifiers](./API_MODIFIERS.md)
+
+__Support all function in [lodash](https://lodash.com/docs):__
+
+```js
+yod('@([1, 2, 3]).sample');   // equal to `_.sample([1, 2, 3])`
+yod('@Int.repeat(10).uniq');  // equal to `_.uniq(yod('@Int.repeat(10)'))`
 ```
 
-#### [BASIC](https://github.com/qiu8310/yod-mock/blob/master/src/mocks/basic.js)
+__Support all function in native javascript:__
 
-* Boolean & Bool
-* Double & Float
-* Integer & Int
-* Number
-* Character & Char
-* String & Str
-* Date
-* Range
-* Sequence & Seq & Id 
-* Guid & GUID & Uuid & UUID
-* Objectid & Oid
-* Md5 & MD5 
-
-#### [TEXT](https://github.com/qiu8310/yod-mock/blob/master/src/mocks/text.js)
-
-* Word & EW
-* Sentence & ES
-* Paragraph & EP
-* CW
-* CS
-* CP
-* Good
-* Face
-
-#### [MEDIA](https://github.com/qiu8310/yod-mock/blob/master/src/mocks/media.js)
-
-* Picture & Pic & Image & Img
-* Audio & Mp3
-* Video & Mp4
-
-#### [USER](https://github.com/qiu8310/yod-mock/blob/master/src/mocks/user.js)
-
-* Gender & Sex
-* Age
-* Avatar
-* First & FirstName
-* Last & LastName 
-* UserName
-* Name & ChineseName
-* Nick & NickName
-* Comment
-* Telephone & Tel
-
-#### [WEB](https://github.com/qiu8310/yod-mock/blob/master/src/mocks/web.js)
-
-* Color
-* Domain
-* Email
-* Ip & IP
-* Ipv6 & IPv6 & IPV6
-
-
-#### [LOCATION](https://github.com/qiu8310/yod-mock/blob/master/src/mocks/location.js)
-
-* Country
-* Province & Region
-* Area
-* Latitude
-* Longitude
-* Coordinates
-
-__另外还一个特殊的 Type：`Lodash`，别名 `_`，可以这么用它（不建议用它做 Type，用它做 Modifier 会非常强大）：__
-
-```javascript
-yod('@_([a, b, c]).value.sample'); // 从数组 ['a', 'b', 'c'] 中随机取出一个值来
+```js
+yod('@([a, b, c]).join("-")'); // equal to `['a', 'b', 'c'].join('-')`
+yod('@String.replace(a, b)');  // equal to `yod('@String').replace('a', 'b')`
 ```
 
+<!-- API_MODIFIERS START -->
 
-__所有 Types 都是大小写敏感的，而且首字母都是大小，下一个版本打算做成不敏感，并且可以不用写全名称__
 
-### Modifiers
+### BASIC
 
-#### repeat([[min,] max] [, join])
+* [repeat](API_MODIFIERS.md#repeat)
+* [index](API_MODIFIERS.md#index)
+* [stringify](API_MODIFIERS.md#stringify)
+* [title](API_MODIFIERS.md#title)
+* [cap](API_MODIFIERS.md#cap)
+* [upper](API_MODIFIERS.md#upper)
+* [lower](API_MODIFIERS.md#lower)
 
-重复生成 min - max 之间某个长度的数据，min 默认值是 1， max 默认值是 10 。
-
-如果指定了 join，会将重复生成的数据用 join 指定的字符合并起来。
-
-__e.g__
-
-```javascript
-yod('@Bool.repeat(2)')    // => 可能生成 [true, false]
-  
-yod('@Int.repeat(3, "-")')  // => 可能生成 "20-3-12"
-```
-
-#### index(n)
-
-取字符串或数组的第 n 个元素。
-
-#### stringify
-
-调用 JSON.stringify 生成字符串。
-
-#### title
-
-只适用于字符串，将字符串中每个单词的首字母大写。
-
-#### cap
-
-只适用于字符串，将字符串中第一个字母大写。
-
-#### lower
-
-只适用于字符串，将字符串中每个字母小写。
-
-#### upper
-
-只适用于字符串，将字符串中每个字母大写。
-
-__另外，modifier 中加了入 [lodash](https://lodash.com/docs) 的所有功能（除了 repeat，因为我重写了它的 repeat）__
+<!-- API_MODIFIERS END -->
 
 
 
-## 引用
+## Reference
 
 * [yod][yod]：本项目的核心引擎（我写的）。
 * [mockjs](http://mockjs.com/#)：阿里出的，也不错，但学习成本较高，也不够强大。

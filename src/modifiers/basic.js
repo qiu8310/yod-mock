@@ -8,16 +8,22 @@
 
 module.exports = function(yod, def, _) {
 
-  yod.modifier(':repeat', def(function() {
+  yod.modifier(':repeat', def(function repeat () {
     /**
      *
-     * repeat 一个 generator 指定的次数
+     * Repeat last generator
+     *
      *
      * @defaults {min: 1, max: 10}
      *
      * @rules ( Function genFn, Integer min, Integer max [, String join] ) -> *
      * @rules ( Function genFn, Integer length [, String join] ) -> *
      * @rules ( Function genFn [, String join] ) -> *
+     *
+     * @example
+     *
+     * yod('@Bool.repeat(2)')       // => some thing like: [true, false]
+     * yod('@Int.repeat(3, "-")')   // => some thing like: "20-3-12"
      */
 
     var length = this.$has('length') ? this.length : _.random(this.min, this.max);
@@ -30,11 +36,16 @@ module.exports = function(yod, def, _) {
   }));
 
 
-  yod.modifier('index', def(function() {
+  yod.modifier('index', def(function index() {
     /**
-     * 返回指定数组或字符串指定的位置
+     * Get indexed item in an array or indexed character in a string
      *
      * @rules ( * arg [, Integer i = 0] ) -> *
+     *
+     * @example
+     *
+     * yod('@([1, 2, 3]).index(2)');  // => 3
+     * yod('@(abc).index(2)');        // => 'c'
      */
     if (_.isArray(this.arg)) {
       return this.arg[this.i];
@@ -47,26 +58,58 @@ module.exports = function(yod, def, _) {
     return this.arg;
   }));
 
-  yod.modifier('stringify', function(obj) {
+  yod.modifier('stringify', def(function stringify(obj) {
+    /**
+     * Call JSON.stringify on obj
+     *
+     * @rule (* obj) -> string
+     */
     return JSON.stringify(obj);
-  });
+  }));
 
-
-  yod.modifier('String', 'title', function(str) {
+  yod.modifier('String', 'title', def(function title(str) {
+    /**
+     * Upper case first letter in every word
+     *
+     * @rule (string str) -> string
+     */
     return str.replace(/\b\w/g, function(letter) { return letter.toUpperCase(); });
-  });
-  yod.modifier('String', 'cap', function(str) {
+  }));
+
+  yod.modifier('String', 'cap', def(function cap(str) {
+    /**
+     * Upper case first letter in str
+     *
+     * @rule (string str) -> string
+     */
     return str.charAt(0).toUpperCase() + str.substr(1);
-  });
-  yod.modifier('String', 'upper', function(str) {
+  }));
+
+
+  yod.modifier('String', 'upper', def(function upper(str) {
+    /**
+     *
+     * Upper case all letters in str
+     *
+     * @rule (string str) -> string
+     */
+
     return str.toUpperCase();
-  });
-  yod.modifier('String', 'lower', function(str) {
+  }));
+
+  yod.modifier('String', 'lower', def(function lower(str) {
+
+    /**
+     * Lower case all letters in str
+     *
+     * @rule (string str) -> string
+     */
+
     return str.toLowerCase();
-  });
+  }));
 
 
-  // 复用 lodash
+  // load lodash modifiers
   _.each(_.keys(_), function(key) {
     if (yod.isModifierNameValid(key) && !yod.isModifierNameExists(key)) {
       yod.modifier(key, function() {
