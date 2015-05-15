@@ -31,7 +31,7 @@
   ],
   "dependencies": {
     "copy-paste": "^1.1.0",
-    "elegant.def": "^2.0.0",
+    "elegant.def": "^3.0.0-alpha.1",
     "moment": "2.10.2",
     "yod": "^1.0.0-alpha.1"
   },

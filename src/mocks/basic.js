@@ -8,34 +8,49 @@
 
 module.exports = function(yod, def, _) {
 
-  /*------------------------------------------------------------------
-   ----------------------  Boolean & Bool     -------------------------
-   ------------------------------------------------------------------*/
-
   yod.type('Boolean & Bool', def(function() {
     /**
-     * 生成一个布尔值
+     * Generate a random boolean value.
      *
-     * @rules ([Number probability = 0.5]) -> Boolean
-     * @rules (String percentage) -> Boolean
+     * @name Boolean
+     * @alias Bool
+     *
+     * @rule ([Number probability = 0.5]) -> Boolean
+     * @rule (String percentage) -> Boolean
+     *
+     * @example
+     *
+     * // Ten percent's probability return true
+     * @Bool(0.1);
+     * @Bool('10%');
      */
 
     return _.prob(this.$has('probability') ? this.probability : this.percentage);
 
   }));
 
-
-  /*------------------------------------------------------------------
-   ----------------------  Double & Float  -------------------------
-   ------------------------------------------------------------------*/
-
   yod.type('Double & Float', def(function() {
     /**
+     *
+     * Generate a random float value.
+     *
+     * __Note: when you specified format to `2`, you may get a random value `0.10`, and the last `0` will be ignored, so you will get `0.1` eventually.__
+     *
+     * @name Double
+     * @alias Float
+     *
      * @defaults {min: 0, max: 1, format: '1-4'}
      *
-     * @rules ([[Number max], [String format]]) -> string
-     * @rules (Number min, Number max, [String format]) -> string
-     * @rules (Number min, Number max, Number format) -> string
+     * @rule ([[Number max], [String format]]) -> float
+     * @rule (Number min, Number max, [String format]) -> float
+     * @rule (Number min, Number max, Number format) -> float
+     *
+     * @example
+     *
+     * @Float('2');       // generate value likes: 0.34
+     * @Float(5, '1-3');  // generate value likes: 3.215 or 2.1 or 4.23
+     * @Float(8, 9, '1'); // generate value likes: 8.2
+     *
      */
     var result = _.random(this.min, this.max, true);
 
@@ -58,36 +73,37 @@ module.exports = function(yod, def, _) {
 
 
 
-  /*------------------------------------------------------------------
-   ----------------------  Integer & Int     -------------------------
-   ------------------------------------------------------------------*/
-
   yod.type('Integer & Int', def(function() {
     /**
-     * 生成一个从 min 到 max 之间的整数（包括 min 和 max）
+     * Generate a random integer between `min` to `max` (include `min` and `max`).
      *
-     * @rules ([[Integer min = 0, ] Integer max = 1000]) -> Integer
+     * @name Integer
+     * @alias Int
+     * @rule ([[Integer min = 0, ] Integer max = 1000]) -> Integer
+     *
+     * @example
+     *
+     * @Int();          // return a integer between 0 - 1000
+     * @Int(10);        // return a integer between 0 - 10
+     * @Int(10, 100);   // return a integer between 10 - 100
+     *
      */
     return _.random(this.min, this.max);
   }));
 
 
-  /*------------------------------------------------------------------
-   ----------------------    Number    -------------------------
-   ------------------------------------------------------------------*/
   yod.type('Number', def(function() {
     /**
-     * 随机生成一个浮点数或者整数
      *
-     * @rules () -> Number
+     * Generator a random number value (can be a random float or integer value).
+     *
+     * @name Number
+     * @rule () -> Number
      */
     return _.prob() ? yod('@Double') : yod('@Integer');
 
   }));
 
-  /*------------------------------------------------------------------
-   ----------------------  Character & Char  -------------------------
-   ------------------------------------------------------------------*/
 
   // config
   var chars = {
@@ -108,7 +124,23 @@ module.exports = function(yod, def, _) {
   // define
   yod.type('Character & Char', def(function() {
     /**
-     * @rules ([String pool = 'alpha' [, Boolean useAsPool = false]]) -> Char
+     *
+     * Generate a random character.
+     *
+     * Available pre-defined pools: `vowel`, `hash`, `consonant`, `lower`, `upper`, `number`, `symbol`, `alpha` and `all`
+     *
+     * - If parameter `pool` not in pre-defined pools, then itself will become a characters pool.
+     * - You can set `useAsPool` to `true` to force pre-defined pool key words to become a normal characters pool.
+     *
+     * @name Character
+     * @alias Char
+     * @rule ([String pool = 'alpha' [, Boolean useAsPool = false]]) -> Char
+     *
+     * @example
+     *
+     * @Char('vowel');        // will return random character in 'aeiou'
+     * @Char('vowel', true);  // will return random character in 'vowel'
+     *
      */
 
     if (chars[this.pool] && !this.useAsPool) {
@@ -120,27 +152,28 @@ module.exports = function(yod, def, _) {
   }));
 
 
-  /*------------------------------------------------------------------
-   ----------------------  String & Str      -------------------------
-   ------------------------------------------------------------------*/
-
   yod.type('String & Str', def(function() {
     /**
+     * Generate a random string.
+     *
+     * - you can specified the string's character generate pool
+     * - you can specified string length by setting `length` argument
+     * - you can set `min` and `max` to get a random length string which length is between `min` to `max`
+     *
+     * @name String
+     * @alias Str
+     *
      * @defaults {min: 2, max: 20}
      *
-     * @rules ([String pool = 'alpha' ] ) -> string
-     * @rules ([String pool = 'alpha' ,] int length) -> string
-     * @rules ([String pool = 'alpha' ,] int min, int max) -> string
+     * @rule ([String pool = 'alpha' ] ) -> string
+     * @rule ([String pool = 'alpha' ,] int length) -> string
+     * @rule ([String pool = 'alpha' ,] int min, int max) -> string
      */
     var length = this.$has('length') ? this.length : _.random(this.min, this.max);
 
-    return yod('@Char("%s", true).repeat(%d, "")', this.pool, length);
+    return yod('@Char("%s").repeat(%d, "")', this.pool, length);
   }));
 
-
-  /*------------------------------------------------------------------
-   ----------------------       Date         -------------------------
-   ------------------------------------------------------------------*/
 
   function toIntJSDate(key, relative, otherwise) {
     key = String(key);
@@ -162,24 +195,31 @@ module.exports = function(yod, def, _) {
 
   yod.type('Date', def(function() {
     /**
-     * 生成随机的 timestamp 日期
+     * Generate a random timestamp or formatted date.
      *
-     * @Date()    => 过去10年的随机 timestamp
-     * @Date(0)   => 过去10年到未来10年之间的一个 timestamp
-     * @Date(-2)  => 过去两年的随机 timestamp
-     * @Date(3)   => 将来三年的随机 timestamp
-     * @Date(-1, 3600)  => 过去一小时的随机 timestamp
-     * @Date("3600", "7200")  => 将来两小时的随机 timestamp
-     * @Date("2011-1-1", "2011-12-31 23:59:59") => 2011-1-1 00:00:00 到 2011-12-31 23:59:59 之间的随机数据
+     * Caller                             |  Description
+     * ---------------------------------  | ----------------
+     * @Date()                            | last ten year's random timestamp
+     * @Date(0)                           | last ten year to next ten year's random timestamp
+     * @Date(-2)                          | last two year's timestamp
+     * @Date(3)                           | next three year's timestamp
+     * @Date(-1, 3600)                    | next one hour's timestamp
+     * @Date("3600", "7200")              | next one hour to next two hour's timestamp
+     * @Date("2011-1-1", "2011-12-31")    | between 2011-1-1 00:00:00 to 2011-12-31 00:00:00
      *
-     * 另外可以在上面所有的方法的参数首位加上 format 参数来指定返回的格式（默认是返回 10 位的 timestamp)，如
-     * @Date('YYYY-MM-DD HH:mm:ss', -2)
      *
-     * 格式字符串参考：http://momentjs.com/docs/#/displaying/format/
+     * Default format is timestamp, you can specified date format in the first argument, for example:
+     *
+     * `@Date('YYYY-MM-DD HH:mm:ss', -2)`
+     *
+     * __Date format reference：http://momentjs.com/docs/#/displaying/format/__
+     *
+     * @name Date
+     *
      * @defaults {format: timestamp}
      *
-     * @rules ([String format,] [Integer flag = -10, [Nature range]]) -> String
-     * @rules ([String format,] String from, String to) -> String
+     * @rule ([String format,] [Integer flag = -10, [Nature range]]) -> String
+     * @rule ([String format,] String from, String to) -> String
      *
      */
     var from, to, now = new Date().getTime(), oneYearMs = 3600000 * 24 * 365;
@@ -206,33 +246,34 @@ module.exports = function(yod, def, _) {
 
 
 
-  /*------------------------------------------------------------------
-   ----------------------        Range       -------------------------
-   ------------------------------------------------------------------*/
-
   yod.type('Range', def(function() {
     /**
+     * Generate a specified integer range.
+     *
+     * @name Range
+     *
      * @defaults {start: 0, stop: 10, step: 1}
      *
-     * @rules () -> Array
-     * @rules (Integer stop) -> Array
-     * @rules (Integer start, Integer stop) -> Array
-     * @rules (Integer start, Integer stop, Integer step) -> Array
+     * @rule () -> Array
+     * @rule (Integer stop) -> Array
+     * @rule (Integer start, Integer stop) -> Array
+     * @rule (Integer start, Integer stop, Integer step) -> Array
      */
 
     return _.range(this.start, this.stop, this.step);
   }));
 
 
-
-  /*------------------------------------------------------------------
-   ----------------------  Sequence & Seq & Id  ----------------------
-   ------------------------------------------------------------------*/
-
   var seqSeeds = {};
-  yod.type('Sequence & Seq & Id', def(function() {
+  yod.type('Id & Sequence & Seq', def(function() {
     /**
-     * @rules ([String seed = '_d'], [Integer start = 1 [, Integer step = 1]]) -> int
+     * Generate a rand auto increment id.
+     *
+     * @name Id
+     * @alias Sequence
+     * @alias Seq
+     *
+     * @rule ([String seed = '_d'], [Integer start = 1 [, Integer step = 1]]) -> int
      */
 
     if (!(this.seed in seqSeeds)) {
@@ -246,19 +287,25 @@ module.exports = function(yod, def, _) {
   }));
 
 
-  /*------------------------------------------------------------------
-   ------------------ Guid & GUID & Uuid & UUID ----------------------
-   ------------------------------------------------------------------*/
+
 
   yod.type('Guid & GUID & Uuid & UUID', def(function() {
     /**
-     * @format xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx
-     *    x is replaced with a random hexadecimal digit from 0 to f
-     *    y is replaced with a random hexadecimal digit from 8 to b
      *
-     * @rules () -> string
+     * Generate a random [guid](http://zh.wikipedia.org/wiki/%E5%85%A8%E5%B1%80%E5%94%AF%E4%B8%80%E6%A0%87%E8%AF%86%E7%AC%A6)
      *
-     * @reference http://zh.wikipedia.org/wiki/%E5%85%A8%E5%B1%80%E5%94%AF%E4%B8%80%E6%A0%87%E8%AF%86%E7%AC%A6
+     * __format: xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx__
+     *
+     *    - x is replaced with a random hexadecimal digit from 0 to f
+     *    - y is replaced with a random hexadecimal digit from 8 to b
+     *
+     * @name Guid
+     * @alias GUID
+     * @alias Uuid
+     * @alias UUID
+     *
+     * @rule () -> string
+     *
      */
 
     /* jshint ignore:start */
@@ -271,15 +318,15 @@ module.exports = function(yod, def, _) {
   }));
 
 
-  /*------------------------------------------------------------------
-   ----------------------  Objectid & Oid    -------------------------
-   ------------------------------------------------------------------*/
-  yod.type('Objectid & Oid', def(function() {
+  yod.type('Objectid & ObjectId & Oid', def(function() {
 
     /**
-     * Mongo 的 id
+     * Generate a random [object id](http://docs.mongodb.org/manual/reference/object-id/)
      *
-     * @rules () -> string
+     * @name Objectid
+     * @alias ObjectId
+     * @alias Oid
+     * @rule () -> string
      */
 
     return yod('@Char(hash).repeat(24, "")');
@@ -287,16 +334,15 @@ module.exports = function(yod, def, _) {
   }));
 
 
-  /*------------------------------------------------------------------
-   ----------------------  Md5 & MD5    -------------------------
-   ------------------------------------------------------------------*/
 
   yod.type('Md5 & MD5', def(function() {
 
     /**
-     * 生成 md5 字符串
+     * Generate a random md5 encrypted value.
      *
-     * @rules () -> string
+     * @name Md5
+     * @alias MD5
+     * @rule () -> string
      */
 
     return yod('@Char(hash).repeat(32, "")');

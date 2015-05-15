@@ -8,38 +8,58 @@
 
 module.exports = function(yod, def, _) {
 
-  /*------------------------------------------------------------------
-   ---------------  Picture & Pic & Image & Img  ---------------------
-   ------------------------------------------------------------------*/
 
-  yod.type('Picture & Pic & Image & Img', def(function() {
+  yod.type('Image & Img & Picture & Pic', def(function() {
     /**
-     * @rules ([String category = 'all']) -> String
+     *
+     * Generate a random image url
+     *
+     * _Using config `system.picture`_
+     *
+     * @name Image
+     * @alias Img
+     * @alias Picture
+     * @alias Pic
+     * @rule ([String category = 'all']) -> String
      */
     return _.sys('picture', {category: this.category});
   }));
 
-  /*------------------------------------------------------------------
-   ----------------------  Audio & Mp3  -------------------------
-   ------------------------------------------------------------------*/
 
 
-  yod.type('Audio & Mp3', def(function() {
+
+  yod.type('Audio & Mp3 & MP3', def(function() {
     /**
-     * @rules ([String category = 'all']) -> String
+     *
+     * Generate a random audio url
+     *
+     * _Using config `system.audio`_
+     *
+     * @name Audio
+     * @alias Mp3
+     * @alias MP3
+     *
+     * @rule ([String category = 'all']) -> String
      */
 
     return _.sys('audio', {category: this.category});
   }));
 
-  /*------------------------------------------------------------------
-   ----------------------  Video & Mp4  -------------------------
-   ------------------------------------------------------------------*/
 
 
-  yod.type('Video & Mp4', def(function() {
+
+  yod.type('Video & Mp4 & MP4', def(function() {
     /**
-     * @rules ([String category = 'all']) -> String
+     *
+     * Generate a random video url
+     *
+     * _Using config `system.video`_
+     *
+     * @name Video
+     * @alias Mp4
+     * @alias MP4
+     *
+     * @rule ([String category = 'all']) -> String
      */
 
     return _.sys('video', {category: this.category});

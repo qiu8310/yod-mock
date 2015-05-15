@@ -8,18 +8,29 @@
 
 module.exports = function(yod, def, _) {
 
-  /*------------------------------------------------------------------
-   ----------------------  CW     -------------------------
-   ------------------------------------------------------------------*/
   yod.type('CW', def(function() {
+    /**
+     * Generate a random Chinese word
+     *
+     * _Using config `system.word.cn`_
+     *
+     * @name CW
+     * @rule () -> string
+     */
+
     return _.sys('word.cn');
   }));
 
 
-  /*------------------------------------------------------------------
-   ----------------------  CS     -------------------------
-   ------------------------------------------------------------------*/
+
   yod.type('CS', def(function() {
+    /**
+     * Generate a random Chinese sentence
+     *
+     * @name CS
+     * @rule () -> string
+     */
+
     var all = yod.config('system.word.cn');
     var len = all.length - 20, res = [];
     _.times(_.random(1, 4), function() {
@@ -34,8 +45,11 @@ module.exports = function(yod, def, _) {
    ------------------------------------------------------------------*/
   yod.type('CP', def(function() {
     /**
-     * @rules (Integer length) -> String
-     * @rules ([ Integer min = 3, Integer max = 7 ]) -> String
+     * Generate a random Chinese paragraph
+     *
+     * @name CP
+     * @rule (Integer length) -> String
+     * @rule ([ Integer min = 3, Integer max = 7 ]) -> String
      */
     return yod('@CS.repeat(%d, " ")', this.length || _.random(this.min, this.max));
   }));
@@ -46,10 +60,15 @@ module.exports = function(yod, def, _) {
    ------------------------------------------------------------------*/
   yod.type('Word & EW', def(function() {
     /**
-     * @rules (Integer length) -> String
-     * @rules ([ Integer min = 3, Integer max = 10 ]) -> String
+     * Generate a random english word
+     *
+     * @name Word
+     * @alias EW
+     *
+     * @rule (Integer length) -> String
+     * @rule ([ Integer min = 3, Integer max = 10 ]) -> String
      */
-    var length = this.$has('length') ? this.length : _.random(this.min, this.max),
+    var length = this.$get('length', _.random(this.min, this.max)),
       consonants = 'bcdfghjklmnprstvwz', // consonants except hard to speak ones
       vowels = 'aeiou', // vowels
       all = consonants + vowels, // all
@@ -76,28 +95,34 @@ module.exports = function(yod, def, _) {
   }));
 
 
-  /*------------------------------------------------------------------
-   ----------------------  Sentence & ES    -------------------------
-   ------------------------------------------------------------------*/
+
   // Could get smarter about this than generating random words and
   // chaining them together. Such as: http://vq.io/1a5ceOh
   yod.type('Sentence & ES', def(function() {
     /**
-     * @rules (Integer length) -> String
-     * @rules ([ Integer min = 12, Integer max = 18 ]) -> String
+     *
+     * Generate a random english sentence
+     *
+     * @name Sentence
+     * @alias ES
+     *
+     * @rule (Integer length) -> String
+     * @rule ([ Integer min = 12, Integer max = 18 ]) -> String
      */
 
     return yod('@Word.repeat(%d, " ").cap.', this.$has('length') ? this.length : _.random(this.min, this.max));
   }));
 
 
-  /*------------------------------------------------------------------
-   ----------------------  Paragraph & EP     -------------------------
-   ------------------------------------------------------------------*/
   yod.type('Paragraph & EP', def(function() {
     /**
-     * @rules (Integer length) -> String
-     * @rules ([ Integer min = 3, Integer max = 7 ]) -> String
+     * Generate a random english paragraph
+     *
+     * @name Paragraph
+     * @alias EP
+     *
+     * @rule (Integer length) -> String
+     * @rule ([ Integer min = 3, Integer max = 7 ]) -> String
      */
 
     return yod('@Sentence.repeat(%d, " ")', this.$has('length') ? this.length : _.random(this.min, this.max));
@@ -105,19 +130,30 @@ module.exports = function(yod, def, _) {
 
 
 
-  /*------------------------------------------------------------------
-   ----------------------  Good    -------------------------
-   ------------------------------------------------------------------*/
 
   yod.type('Good', def(function() {
+    /**
+     * Generate a random good word
+     *
+     * _Using config `system.word.good`_
+     *
+     * @name Good
+     * @rule () -> string
+     */
     return _.sys('word.good');
   }));
 
 
-  /*------------------------------------------------------------------
-   ----------------------  Face     -------------------------
-   ------------------------------------------------------------------*/
+
   yod.type('Face', def(function() {
+    /**
+     * Generate a random ascii face string
+     *
+     * _Using config `system.word.face`_
+     *
+     * @name Face
+     * @rule () -> string
+     */
     return _.sys('word.face');
   }));
 

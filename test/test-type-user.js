@@ -121,6 +121,14 @@ describe('yod type user', function () {
       _.times(10, function() {
         yod('@Telephone').should.match(/^1[345678]\d{9}$/);
         yod('@Tel').should.match(/^1[345678]\d{9}$/);
+        yod('@Tel(true)').should.match(/^[\d-]{13}$/);
+
+        yod('@Tel(us)').should.be.a.String;
+        yod('@Tel(us, true)').should.be.a.String;
+        yod('@Tel(uk)').should.be.a.String;
+        yod('@Tel(uk, true)').should.be.a.String;
+        yod('@Tel(fr)').should.be.a.String;
+        yod('@Tel(fr, true)').should.be.a.String;
       });
     });
   });

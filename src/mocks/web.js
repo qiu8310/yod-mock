@@ -8,11 +8,21 @@
 
 module.exports = function(yod, def, _) {
 
-  /*------------------------------------------------------------------
-   ----------------------  Color     -------------------------
-   ------------------------------------------------------------------*/
   yod.type('Color', def(function(format) {
 
+    /**
+     * Generate a random color value
+     *
+     * @name Color
+     *
+     * @rule ([string format]) -> string
+     *
+     * @example
+     *
+     * @Color();        // => some thing like: '#AB32F1'
+     * @Color(short);   // => some thing like: '#345'
+     * @Color(rgb);     // => some thing like: 'rgb(2, 10, 231)'
+     */
     var len = 6;
     if (_.shortCut(format, 'short')) {
       len = 3;
@@ -24,35 +34,54 @@ module.exports = function(yod, def, _) {
   }));
 
 
-  /*------------------------------------------------------------------
-   ----------------------  Domain     -------------------------
-   ------------------------------------------------------------------*/
   var tld = ['com', 'org', 'edu', 'gov', 'co.uk', 'net', 'io'];
   yod.type('Domain', def(function() {
+    /**
+     * Generate a random domain
+     *
+     * @name Domain
+     *
+     * @rule () -> string
+     */
     return yod('@Word(3, 7)') + '.' + _.sample(tld);
   }));
 
 
-  /*------------------------------------------------------------------
-   ----------------------  Email     -------------------------
-   ------------------------------------------------------------------*/
   yod.type('Email', def(function() {
+    /**
+     * Generate a random email
+     *
+     * @name Email
+     *
+     * @rule () -> string
+     */
     return yod('@First.lower') + (_.prob(0.5) ? yod('.@Last.lower') : '') + '@' + yod('@Domain');
   }));
 
 
-  /*------------------------------------------------------------------
-   ----------------------  Ip & IP     -------------------------
-   ------------------------------------------------------------------*/
   yod.type('Ip & IP', def(function() {
-    return yod('@Integer(10, 254).repeat(4, ".")');
+    /**
+     * Generate a random ip
+     *
+     * @name Ip
+     * @alias IP
+     *
+     * @rule () -> string
+     */
+    return yod('@Integer(1, 254).repeat(4, ".")');
   }));
 
 
-  /*------------------------------------------------------------------
-   ----------------------  Ipv6 & IPv6 & IPV6    -------------------------
-   ------------------------------------------------------------------*/
   yod.type('Ipv6 & IPv6 & IPV6', def(function() {
+    /**
+     * Generate a random ipv6
+     *
+     * @name Ipv6
+     * @alias IPv6
+     * @alias IPV6
+     *
+     * @rule () -> string
+     */
     return yod('@Char(hash).repeat(4, "").repeat(8, ":")');
   }));
 
