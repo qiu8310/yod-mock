@@ -24,7 +24,7 @@
 >
 
 
-__主要特点：__
+__Features:__
 
 * 语法简洁，学习成本低，功能强大
 * 支持所有 JS 原生的函数
@@ -67,16 +67,11 @@ bower install --save-dev yod-mock
 
 ## Usage
 
-* [Using yod.config](examples/1.config.js)
-* [Using yod.modifier](examples/3.modifier.js)
-* [Using yod.type](examples/2.type.js)
-* [Using yod](examples/4.all.js)
-* [Escaping key word](examples/5.escape.js)
-
-__一般只需要两步：__
-
-- 第一步，先定义你的数据结构体 `yod.type('xxx', {...})`
-- 第二步，使用你的结构体生成数据 `yod('@xxx.repeat(5, 10)')`
+* [Use yod config](examples/1.config.js)
+* [Use yod modifier](examples/3.modifier.js)
+* [Use yod type](examples/2.type.js)
+* [Escape key word](examples/5.escape.js)
+* [Use yod](examples/4.all.js)
 
 
 __DEMO：（[Edit this demo online](http://qiu8310.github.io/yod-mock/)）__
