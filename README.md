@@ -39,30 +39,25 @@ __主要特点：__
 
 // http://www.cnblogs.com/top5/archive/2011/11/08/2241349.html 全国邮编及区号
 
-Random.image()
-// => "http://dummyimage.com/125x125"
-Random.image('200x100')
-// => "http://dummyimage.com/200x100"
-Random.image('200x100', '#fb0a2a')
-// => "http://dummyimage.com/200x100/fb0a2a"
-Random.image('200x100', '#02adea', 'Hello')
-// => "http://dummyimage.com/200x100/02adea&text=Hello"
-Random.image('200x100', '#00405d', '#FFF', 'Mock.js')
-// => "http://dummyimage.com/200x100/00405d/FFF&text=Mock.js"
-Random.image('200x100', '#ffcc33', '#FFF', 'png', '!')
-// => "http://dummyimage.com/200x100/ffcc33/FFF.png&text=!"
-
 -->
 
 ## Install
 
+### CLI
+
+```base
+npm install --global yod-mock
+```
+
+- Using `yod image` to get a random image
+- Using `yod image -c` to get a random image and copy it to clipboard
+- Using `yod image .repeat 10` to get 10 random images
 
 ### Node.js
 
 ```bash
 npm install --save-dev yod-mock
 ```
-__如果全局安装，可以使用 `yod` 命令，在命令行上输出 mock 的数据，使用 `yod -c xxx` 可以复制生成的内容__
 
 ### Browser
 
@@ -72,6 +67,11 @@ bower install --save-dev yod-mock
 
 ## Usage
 
+* [Using yod.config](examples/1.config.js)
+* [Using yod.modifier](examples/3.modifier.js)
+* [Using yod.type](examples/2.type.js)
+* [Using yod](examples/4.all.js)
+* [Escaping key word](examples/5.escape.js)
 
 __一般只需要两步：__
 
@@ -79,57 +79,49 @@ __一般只需要两步：__
 - 第二步，使用你的结构体生成数据 `yod('@xxx.repeat(5, 10)')`
 
 
-__DEMO：（[你可以在线查看编辑此DEMO](http://qiu8310.github.io/yod-mock/)）__
+__DEMO：（[Edit this demo online](http://qiu8310.github.io/yod-mock/)）__
 
 ```javascript
 
 /*
 
-三个系统自带的功能：
+@Self:   Current plain object
+@Parent: Parent plain object
+@Config: Config item
 
-@Self: 是取当前对象
-@Parent: 是取当前对象的父对象
-@Config: 取当前系统的配置项目
-
-注意：数组不算是对象，只有 JS 中的 {...} 才算是对象
-
-其它以 @ 开头的关键字都是已经定义好的类型，
-如 @Nick 是随机生成一个昵称，@Mp3 是随机生成一个 mp3 文件的链接
 */
 
-// 定义一个用户类型
+// Define an `User` type
 yod.type('User', {
-  firstName: '@First',
+  firstName: '@First',              // Get a random firstName
   lastName: '@Last',
   sex: '@Sex',
-  fullName: '@Self.firstName @Self.lastName',
+  fullName: '@Self.firstName @Self.lastName',  // Join current object's firstName and lastName
   nickName: '@Nick',
   chineseName: '@ChineseName',
-  age: '@Age(adult)',
-  to100: '` 100 - @Self.age `',   // 执行 JS 语句
+  age: '@Age(adult)',               // Call @Age with a argument
+  to100: '` 100 - @Self.age `',     // Execute javascript code
   telephone: '@Tel',
   avatar: '@Avatar',
   others: {
      words: 'Hello, my name is @Parent.fullName, you can call me @Parent.nickName.',
-     bestFriends: '@Nick.repeat(2, 3).join(", ")',
-     myFirstNameLength: '@Parent.firstName.length',
-     favouriteLetter: '@([A, B, C]).sample'
+     bestFriends: '@Nick.repeat(2, 3).join(", ")',    // Call native array's join function
+     myFirstNameLength: '@Parent.firstName.length',   // Call native string's length attribute
+     favouriteLetter: '@([A, B, C]).sample'           // Call lodash sample function
   }
 });
 
-// 用上面的 User 结构体 重复生成 2 - 4 个 User
+// Use `User` type to generate an object with ten users in it
 console.log(yod({
     status: 'ok',
-    list: '@User.repeat(2, 4)'
+    list: '@User.repeat(10)'
 }));
 
-// 你也可以直接返回一个数组
-// console.log(yod('@User.repeat(2, 4)'));
+// or Use `User` type to generate directly array
+// console.log(yod('@User.repeat(10)'));
 
 ```
 
-
-_此项目只是在 [yod][yod] 项目基础上定义了一些常用的 type 和 modifier。(type 和 modifier 的细节可以在 [yod][yod] 项目中查看)_
 
 
 ## [Types](./API_TYPES.md)
@@ -164,6 +156,9 @@ _此项目只是在 [yod][yod] 项目基础上定义了一些常用的 type 和 
 ### MEDIA
 
 * [Image & Img & Picture & Pic](API_TYPES.md#image--img--picture--pic)
+* [Dummy](API_TYPES.md#dummy)
+* [PlaceHold & Placehold](API_TYPES.md#placehold--placehold)
+* [PlaceImg & Placeimg](API_TYPES.md#placeimg--placeimg)
 * [Audio & Mp3 & MP3](API_TYPES.md#audio--mp3--mp3)
 * [Video & Mp4 & MP4](API_TYPES.md#video--mp4--mp4)
 

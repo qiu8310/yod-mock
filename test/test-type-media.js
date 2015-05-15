@@ -26,6 +26,32 @@ describe('yod type media', function () {
       });
     });
   });
+
+  context('@Dummy & @Placehold & @PlaceHold', function() {
+    it('should work', function() {
+      yod('@Dummy').should.be.a.String;
+      yod('@Placehold').should.be.a.String;
+      yod('@PlaceHold').should.be.a.String;
+    });
+
+    it('should support arguments', function() {
+      yod('@Placehold("300")').should.be.a.String;
+      yod('@Placehold("300", haha)').should.be.a.String;
+      yod('@Placehold("300", haha, "ff00ff")').should.be.a.String;
+      yod('@Placehold("300", haha, "ff00ff/00ff00")').should.be.a.String;
+    });
+  });
+
+  context('@Placeimg & @PlaceImg', function() {
+    it('should work', function() {
+      yod('@Placeimg').should.be.a.String;
+      yod('@PlaceImg').should.be.a.String;
+      yod('@PlaceImg(300)').should.be.a.String;
+      yod('@PlaceImg(300, t)').should.be.a.String;
+      yod('@PlaceImg(300, pe, gray)').should.be.a.String;
+    });
+  });
+
   context('@Audio & @Mp3', function() {
 
     it('should work', function() {

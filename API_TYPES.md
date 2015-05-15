@@ -335,7 +335,58 @@ __Rules:__
 
 
 
-### [Audio & Mp3 & MP3](src/mocks/media.js#L31-46)
+### [Dummy](src/mocks/media.js#L38-49)
+
+Using [http://dummyimage.com](http://dummyimage.com) to generate a random image
+
+__Rules:__ 
+
+  - `() -> string`
+  - `(string size) -> string`
+  - `(string size, string text) -> string`
+  - `(string size, string text, string colors) -> string`
+  - `(int size) -> string`
+  - `(int size, string text) -> string`
+  - `(int size, string text, string colors) -> string`
+
+
+
+
+### [PlaceHold & Placehold](src/mocks/media.js#L51-65)
+
+Using [http://placehold.it](http://placehold.it) to generate a random image
+
+__Rules:__ 
+
+  - `() -> string`
+  - `(string size) -> string`
+  - `(string size, string text) -> string`
+  - `(string size, string text, string colors) -> string`
+  - `(int size) -> string`
+  - `(int size, string text) -> string`
+  - `(int size, string text, string colors) -> string`
+
+
+
+
+### [PlaceImg & Placeimg](src/mocks/media.js#L67-86)
+
+Using [http://placeimg.com](http://placeimg.com) to generate a random image
+
+__Rules:__ 
+
+  - `() -> string`
+  - `(string size) -> string`
+  - `(string size, string category) -> string`
+  - `(string size, string category, string hue) -> string`
+  - `(int size) -> string`
+  - `(int size, string category) -> string`
+  - `(int size, string category, string hue) -> string`
+
+
+
+
+### [Audio & Mp3 & MP3](src/mocks/media.js#L91-106)
 
 Generate a random audio url
 
@@ -349,7 +400,7 @@ __Rules:__
 
 
 
-### [Video & Mp4 & MP4](src/mocks/media.js#L51-67)
+### [Video & Mp4 & MP4](src/mocks/media.js#L111-127)
 
 Generate a random video url
 

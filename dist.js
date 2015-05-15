@@ -792,6 +792,66 @@ yod.type('Image & Img & Picture & Pic', def(function() {
 }, {"rules":[["string",[["category","string","all"]],[[],[0]]]],"names":["Image","Img","Picture","Pic"]}));
 
 
+function _uriComponent(arg) { return encodeURIComponent(arg).replace(/%20/g, '+'); }
+function _holder(base, self) {
+  var size = self.$get('size', '640x480'),
+    colors = self.$get('colors', yod('@Color/${@Color}.png')).replace(/#/g, '').toLowerCase(),
+    text = _uriComponent(self.$get('text', yod('@Good')));
+
+  return base + size + '/' + colors + '&text=' + text;
+}
+
+yod.type('Dummy', def(function Dummy(self) {
+  /**
+   *
+   * Using [http://dummyimage.com](http://dummyimage.com) to generate a random image
+   *
+   * @rule ([string size, [string text, [string colors]]]) -> string
+   * @rule ([int size, [string text, [string colors]]]) -> string
+   *
+   */
+
+  return _holder('http://dummyimage.com/', self);
+}, {"rules":[["string",[["size","string"],["text","string"],["colors","string"]],[[],[0],[0,1],[0,1,2]]],["string",[["size","int"],["text","string"],["colors","string"]],[[0],[0,1],[0,1,2]]]],"names":["Dummy"],"arguments":["self"]}));
+
+yod.type('Placehold & PlaceHold', def(function Placehold(self) {
+  /**
+   *
+   * Using [http://placehold.it](http://placehold.it) to generate a random image
+   *
+   * @alias PlaceHold
+   *
+   * @rule ([string size, [string text, [string colors]]]) -> string
+   * @rule ([int size, [string text, [string colors]]]) -> string
+   *
+   */
+
+  return _holder('http://placehold.it/', self);
+
+}, {"rules":[["string",[["size","string"],["text","string"],["colors","string"]],[[],[0],[0,1],[0,1,2]]],["string",[["size","int"],["text","string"],["colors","string"]],[[0],[0,1],[0,1,2]]]],"names":["PlaceHold","Placehold"],"arguments":["self"]}));
+
+yod.type('Placeimg & PlaceImg', def(function Placeimg() {
+  /**
+   *
+   * Using [http://placeimg.com](http://placeimg.com) to generate a random image
+   *
+   * @defaults {categories: [animals, arch, nature, people, tech], hues: [sepia, grayscale]}
+   * @alias PlaceImg
+   * @rule ([string size, [string category, [string hue]]]) -> string
+   * @rule ([int size, [string category, [string hue]]]) -> string
+   */
+  var size = this.$get('size', '640x480');
+  if (!/^\d+x\d+$/.test(size)) {
+    size = size + 'x' + size;
+  }
+
+  var cate = _.shortCut(this.category, this.categories) || _.sample(this.categories);
+  var hue = _.shortCut(this.hue, this.hues);
+
+  return 'http://placeimg.com/' + size.replace('x', '/') + '/' + cate + (hue ? '/' + hue : '');
+}, {"defaults":{"categories":["animals","arch","nature","people","tech"],"hues":["sepia","grayscale"]},"rules":[["string",[["size","string"],["category","string"],["hue","string"]],[[],[0],[0,1],[0,1,2]]],["string",[["size","int"],["category","string"],["hue","string"]],[[0],[0,1],[0,1,2]]]],"names":["PlaceImg","Placeimg"]}));
+
+
 
 
 yod.type('Audio & Mp3 & MP3', def(function() {
