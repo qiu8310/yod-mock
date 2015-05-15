@@ -1,14 +1,6 @@
 #!/usr/bin/env sh
 
-dir=`dirname $0`
-
-# 生成文档
-cd $dir
-npm run docs
-
-cd docs
-
-echo "Document direcotry: `pwd`"
+npm run page
 
 if [[ ! -d ./.git ]]; then
   git init
@@ -18,6 +10,9 @@ else
   git co gh-pages -q
 fi
 
+
+cp -r gh-pages/* .
+
 git add . -A
-git commit -m "publish docs"
-git push origin gh-pages --force
+git commit -m "publish gh-pages"
+git push origin gh-pages

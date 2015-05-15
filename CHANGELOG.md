@@ -1,4 +1,17 @@
 
+0.3.0 / 2015-05-15
+==================
+
+  * 添加几个 image holder 类型，并添加一些简单的 examples
+  * 添加命令 readme, 自动生成 types 和 modifiers 的文档
+  * Update Latitude and Longitude rules
+  * 添加 CarType 和 CarImage 及 生成 API_TYPES.md 文档
+  * helper.sys 支持取空对象
+  * 简单重写了下 yod.type 方法
+  * Add a Gitter chat badge
+  * 优化 helper.sys 函数
+  * 引入 travis 和 covervall
+
 0.2.0 / 2015-04-30
 ==================
 
