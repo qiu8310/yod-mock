@@ -4472,11 +4472,11 @@
 	 * 不支持 heredoc，适合用在代码需要压缩的地方（代码压缩会将 heredoc 给删除了）
 	 */
 
-	var base = __webpack_require__(5);
-	var option = __webpack_require__(6);
-	var Rule = __webpack_require__(7);
-	var type = __webpack_require__(8);
-	var Self = __webpack_require__(9);
+	var base = __webpack_require__(8);
+	var option = __webpack_require__(9);
+	var Rule = __webpack_require__(10);
+	var type = __webpack_require__(11);
+	var Self = __webpack_require__(12);
 
 	/**
 	 *
@@ -4520,9 +4520,9 @@
 
 	var _ = __webpack_require__(13);
 
-	var config = __webpack_require__(10),
-	  gen = __webpack_require__(11).generator,
-	  tm = __webpack_require__(12);
+	var config = __webpack_require__(5),
+	  gen = __webpack_require__(6).generator,
+	  tm = __webpack_require__(7);
 
 
 
@@ -4661,6 +4661,266 @@
 
 /***/ },
 /* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*
+	 * yod
+	 * https://github.com/qiu8310/yod
+	 *
+	 * Copyright (c) 2015 Zhonglei Qiu
+	 * Licensed under the MIT license.
+	 */
+
+	var _ = __webpack_require__(13);
+
+	var _meta = {};
+	var _all = {};
+
+
+	var _reMeta = /:meta$/;
+
+
+	/**
+	 * Set or get config key.
+	 *
+	 * @param {String} key
+	 * @param {*} [val]
+	 * @param {Object} [meta]
+	 * @returns {*}
+	 */
+	function config(key, val, meta) {
+
+	  var keys, lastKey, addMeta;
+
+	  addMeta = _reMeta.test(key);
+	  key = key.replace(_reMeta, '');
+	  keys = key.split('.');
+
+	  // get
+	  if (_.isUndefined(val)) {
+	    meta = _meta[key];
+	    val = _.reduce(keys, function(ref, k) {
+	      if (ref && ref.hasOwnProperty && ref.hasOwnProperty(k)) {
+	        ref = ref[k];
+	        return ref;
+	      }
+	    }, _all);
+
+	  } else { // set
+	    if (!_.isUndefined(meta)) { _meta[key] = meta; }
+	    lastKey = keys.pop();
+
+	    var prevVal = _.reduce(keys, function(ref, k) {
+	      if (!_.isObject(ref[k])) { ref[k] = {}; }
+
+	      ref = ref[k];
+
+	      return ref;
+	    }, _all);
+
+	    prevVal[lastKey] = val;
+	  }
+
+	  return addMeta ? {meta: meta, val: val} : val;
+	}
+
+
+	config.all = _all;
+	config.meta = _meta;
+
+	module.exports = config;
+
+
+/***/ },
+/* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*
+	 * yod
+	 * https://github.com/qiu8310/yod
+	 *
+	 * Copyright (c) 2015 Zhonglei Qiu
+	 * Licensed under the MIT license.
+	 */
+
+	var KVPairNode = __webpack_require__(14);
+	var parse = __webpack_require__(15);
+	var _ = __webpack_require__(13);
+
+	module.exports = {
+	  generator: function(obj) {
+	    return function() {
+	      if (_.isPlainObject(obj)) {
+	        return (new KVPairNode(obj)).getValue();
+	      } else if (_.isFunction(obj)) {
+	        return obj();
+	      } else {
+	        return parse(obj);
+	      }
+	    };
+	  }
+	};
+
+
+/***/ },
+/* 7 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*
+	 * yod
+	 * https://github.com/qiu8310/yod
+	 *
+	 * Copyright (c) 2015 Zhonglei Qiu
+	 * Licensed under the MIT license.
+	 */
+
+	'use strict';
+	var _ = __webpack_require__(13),
+	  type = __webpack_require__(16),
+	  modifier = __webpack_require__(17);
+
+	/**
+	 *
+	 * Simple group of type and modifier, "t" meaning {@link type}, "m" meaning {@link modifier}.
+	 *
+	 * @namespace
+	 * @type {Object}
+	 */
+	var tm = {};
+
+
+	/**
+	 * Define a new type
+	 *
+	 * @param {String} name - type name
+	 * @param {Array|String} [aliases = []] - type aliases
+	 * @param {Function} fn - type function
+	 * @param {*} [ctx = null] - type function's bind target
+	 *
+	 * @example
+	 *
+	 * // 随机生成布尔值
+	 * yod.type('Boolean', ['Bool'], function() {
+	 *   return Date.now() % 2 === 0;
+	 * });
+	 *
+	 */
+	tm.type = function(name, aliases, fn, ctx) {
+	  if (_.isFunction(aliases)) {
+	    ctx = fn;
+	    fn = aliases;
+	    aliases = [];
+	  }
+
+	  type.create(name, fn, ctx);
+
+	  _.each([].concat(aliases), function(alias) { type.alias(alias, name); });
+	};
+
+
+	/**
+	 * Define a new modifier
+	 * @param {String|Function|Array} [filters = []] - modifier filters
+	 * @param {String} name - modifier name
+	 * @param {Function} fn - modifier function
+	 * @param {*} [ctx = null] - modifier function's bind target
+	 * @example
+	 *
+	 * yod.modifier('String', 'first', function(str) {
+	 *   return str[0];
+	 * });
+	 *
+	 * @example
+	 *
+	 * function isFooBar(arg) {
+	 *   if (arg === 'foo' || arg === 'bar') { return true; }
+	 * }
+	 * yod.hook(['String', isFooBar], 'double', function(fooBarStr) {
+	 *   return fooBarStr + fooBarStr;
+	 * });
+	 */
+	tm.modifier = function(filters, name, fn, ctx) {
+	  if (_.isFunction(name)) {
+	    ctx = fn;
+	    fn = name;
+	    name = filters;
+	    filters = [];
+	  }
+
+	  modifier.create([].concat(filters), name, fn, ctx);
+	};
+
+	/**
+	 * Clean all defined types and modifiers
+	 */
+	tm.clean = function(arg) {
+	  var obj = {type: type, modifier: modifier};
+	  _.each([].concat(obj[arg] || _.values(obj)), function(t){
+	    _.each(t.all, function(v, k) {
+	      delete t.all[k];
+	    });
+	  });
+	};
+
+
+	/**
+	 * Function's modifier generator
+	 * @param {Function} fn
+	 * @param {Array} modSeries
+	 * @returns {Function}
+	 */
+	tm.fnGenerator = function(fn, modSeries) {
+	  return _.reduce([].concat(modSeries ? modSeries : []), function(fn, mod) {
+	    return modifier.generator(fn, mod.name, mod.args, mod.ctx);
+	  }, fn);
+	};
+
+	/**
+	 * Generator type and modifier series generator.
+	 *
+	 *
+	 * @param {String} [typeName]
+	 * @param {Array} [series] - type and modifier arrays, series's first argument is type, and others is modifier
+	 * @returns {Function}
+	 * @example
+	 *
+	 * yod.generator('Bool');
+	 *
+	 * @example
+	 *
+	 * yod.generator('Bool', [{name: 'repeat', args: [3, 8]}]);
+	 *
+	 * @example
+	 *
+	 * yod.generator([ {name: 'Bool', args: [0.6]}, {name: 'repeat', args: [3]} ]);
+	 */
+	tm.generator = function(typeName, series) {
+	  var typ,
+	    mods;
+
+	  if (_.isString(typeName)) {
+	    typ = {name: typeName};
+	    mods = series || [];
+	  } else {
+	    series = typeName;
+	    typ = series[0];
+	    mods = series.slice(1);
+	  }
+
+	  var fn = type.generator(typ.name, typ.args, typ.ctx);
+
+	  return tm.fnGenerator(fn, mods);
+	};
+
+	tm.t = type;
+	tm.m = modifier;
+
+	module.exports = tm;
+
+
+
+/***/ },
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -4858,7 +5118,7 @@
 
 
 /***/ },
-/* 6 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -4888,11 +5148,11 @@
 
 
 /***/ },
-/* 7 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var base = __webpack_require__(5),
-	  type = __webpack_require__(8);
+	var base = __webpack_require__(8),
+	  type = __webpack_require__(11);
 
 	module.exports = {
 	  /**
@@ -4957,14 +5217,14 @@
 
 
 /***/ },
-/* 8 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
 	 * @module type
 	 */
 
-	var base = __webpack_require__(5);
+	var base = __webpack_require__(8);
 
 	var type = {};
 
@@ -5086,11 +5346,11 @@
 
 
 /***/ },
-/* 9 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var base = __webpack_require__(5);
-	var Rule = __webpack_require__(7);
+	var base = __webpack_require__(8);
+	var Rule = __webpack_require__(10);
 
 	/**
 	 * @class Self
@@ -5155,266 +5415,6 @@
 
 
 	module.exports = Self;
-
-
-/***/ },
-/* 10 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/*
-	 * yod
-	 * https://github.com/qiu8310/yod
-	 *
-	 * Copyright (c) 2015 Zhonglei Qiu
-	 * Licensed under the MIT license.
-	 */
-
-	var _ = __webpack_require__(13);
-
-	var _meta = {};
-	var _all = {};
-
-
-	var _reMeta = /:meta$/;
-
-
-	/**
-	 * Set or get config key.
-	 *
-	 * @param {String} key
-	 * @param {*} [val]
-	 * @param {Object} [meta]
-	 * @returns {*}
-	 */
-	function config(key, val, meta) {
-
-	  var keys, lastKey, addMeta;
-
-	  addMeta = _reMeta.test(key);
-	  key = key.replace(_reMeta, '');
-	  keys = key.split('.');
-
-	  // get
-	  if (_.isUndefined(val)) {
-	    meta = _meta[key];
-	    val = _.reduce(keys, function(ref, k) {
-	      if (ref && ref.hasOwnProperty && ref.hasOwnProperty(k)) {
-	        ref = ref[k];
-	        return ref;
-	      }
-	    }, _all);
-
-	  } else { // set
-	    if (!_.isUndefined(meta)) { _meta[key] = meta; }
-	    lastKey = keys.pop();
-
-	    var prevVal = _.reduce(keys, function(ref, k) {
-	      if (!_.isObject(ref[k])) { ref[k] = {}; }
-
-	      ref = ref[k];
-
-	      return ref;
-	    }, _all);
-
-	    prevVal[lastKey] = val;
-	  }
-
-	  return addMeta ? {meta: meta, val: val} : val;
-	}
-
-
-	config.all = _all;
-	config.meta = _meta;
-
-	module.exports = config;
-
-
-/***/ },
-/* 11 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/*
-	 * yod
-	 * https://github.com/qiu8310/yod
-	 *
-	 * Copyright (c) 2015 Zhonglei Qiu
-	 * Licensed under the MIT license.
-	 */
-
-	var KVPairNode = __webpack_require__(14);
-	var parse = __webpack_require__(15);
-	var _ = __webpack_require__(13);
-
-	module.exports = {
-	  generator: function(obj) {
-	    return function() {
-	      if (_.isPlainObject(obj)) {
-	        return (new KVPairNode(obj)).getValue();
-	      } else if (_.isFunction(obj)) {
-	        return obj();
-	      } else {
-	        return parse(obj);
-	      }
-	    };
-	  }
-	};
-
-
-/***/ },
-/* 12 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/*
-	 * yod
-	 * https://github.com/qiu8310/yod
-	 *
-	 * Copyright (c) 2015 Zhonglei Qiu
-	 * Licensed under the MIT license.
-	 */
-
-	'use strict';
-	var _ = __webpack_require__(13),
-	  type = __webpack_require__(16),
-	  modifier = __webpack_require__(17);
-
-	/**
-	 *
-	 * Simple group of type and modifier, "t" meaning {@link type}, "m" meaning {@link modifier}.
-	 *
-	 * @namespace
-	 * @type {Object}
-	 */
-	var tm = {};
-
-
-	/**
-	 * Define a new type
-	 *
-	 * @param {String} name - type name
-	 * @param {Array|String} [aliases = []] - type aliases
-	 * @param {Function} fn - type function
-	 * @param {*} [ctx = null] - type function's bind target
-	 *
-	 * @example
-	 *
-	 * // 随机生成布尔值
-	 * yod.type('Boolean', ['Bool'], function() {
-	 *   return Date.now() % 2 === 0;
-	 * });
-	 *
-	 */
-	tm.type = function(name, aliases, fn, ctx) {
-	  if (_.isFunction(aliases)) {
-	    ctx = fn;
-	    fn = aliases;
-	    aliases = [];
-	  }
-
-	  type.create(name, fn, ctx);
-
-	  _.each([].concat(aliases), function(alias) { type.alias(alias, name); });
-	};
-
-
-	/**
-	 * Define a new modifier
-	 * @param {String|Function|Array} [filters = []] - modifier filters
-	 * @param {String} name - modifier name
-	 * @param {Function} fn - modifier function
-	 * @param {*} [ctx = null] - modifier function's bind target
-	 * @example
-	 *
-	 * yod.modifier('String', 'first', function(str) {
-	 *   return str[0];
-	 * });
-	 *
-	 * @example
-	 *
-	 * function isFooBar(arg) {
-	 *   if (arg === 'foo' || arg === 'bar') { return true; }
-	 * }
-	 * yod.hook(['String', isFooBar], 'double', function(fooBarStr) {
-	 *   return fooBarStr + fooBarStr;
-	 * });
-	 */
-	tm.modifier = function(filters, name, fn, ctx) {
-	  if (_.isFunction(name)) {
-	    ctx = fn;
-	    fn = name;
-	    name = filters;
-	    filters = [];
-	  }
-
-	  modifier.create([].concat(filters), name, fn, ctx);
-	};
-
-	/**
-	 * Clean all defined types and modifiers
-	 */
-	tm.clean = function(arg) {
-	  var obj = {type: type, modifier: modifier};
-	  _.each([].concat(obj[arg] || _.values(obj)), function(t){
-	    _.each(t.all, function(v, k) {
-	      delete t.all[k];
-	    });
-	  });
-	};
-
-
-	/**
-	 * Function's modifier generator
-	 * @param {Function} fn
-	 * @param {Array} modSeries
-	 * @returns {Function}
-	 */
-	tm.fnGenerator = function(fn, modSeries) {
-	  return _.reduce([].concat(modSeries ? modSeries : []), function(fn, mod) {
-	    return modifier.generator(fn, mod.name, mod.args, mod.ctx);
-	  }, fn);
-	};
-
-	/**
-	 * Generator type and modifier series generator.
-	 *
-	 *
-	 * @param {String} [typeName]
-	 * @param {Array} [series] - type and modifier arrays, series's first argument is type, and others is modifier
-	 * @returns {Function}
-	 * @example
-	 *
-	 * yod.generator('Bool');
-	 *
-	 * @example
-	 *
-	 * yod.generator('Bool', [{name: 'repeat', args: [3, 8]}]);
-	 *
-	 * @example
-	 *
-	 * yod.generator([ {name: 'Bool', args: [0.6]}, {name: 'repeat', args: [3]} ]);
-	 */
-	tm.generator = function(typeName, series) {
-	  var typ,
-	    mods;
-
-	  if (_.isString(typeName)) {
-	    typ = {name: typeName};
-	    mods = series || [];
-	  } else {
-	    series = typeName;
-	    typ = series[0];
-	    mods = series.slice(1);
-	  }
-
-	  var fn = type.generator(typ.name, typ.args, typ.ctx);
-
-	  return tm.fnGenerator(fn, mods);
-	};
-
-	tm.t = type;
-	tm.m = modifier;
-
-	module.exports = tm;
-
 
 
 /***/ },
@@ -5581,7 +5581,19 @@
 	 */
 
 	var _ = __webpack_require__(13);
-	var KVPair = __webpack_require__(18);
+	var KVPair = __webpack_require__(21);
+
+	function parseNodeValue(target, ctx) {
+	  if (_.isPlainObject(target)) {
+	    return new KVPairNode(target, ctx);
+	  } else if (_.isArray(target)) {
+	    return _.map(target, function(v) {
+	      return parseNodeValue(v, ctx);
+	    });
+	  } else {
+	    return target;
+	  }
+	}
 
 	/**
 	 *
@@ -5611,9 +5623,7 @@
 
 	  // parse
 	  _.each(obj, function(value, key) {
-	    if (_.isPlainObject(value)) {
-	      value = new KVPairNode(value, this);
-	    }
+	    value = parseNodeValue(value, this);
 	    this.kvPairs.push(new KVPair(key, value, this));
 	  }, this);
 
@@ -5641,13 +5651,16 @@
 
 	/**
 	 * Get a generated object value.
+	 * @param {Array<KVPair>} pairStack - 对象中的数组如果包含一个对象，解析时会传这个 pairStack 过来
 	 * @returns {Object}
 	 */
-	KVPairNode.prototype.getValue = function() {
+	KVPairNode.prototype.getValue = function(pairStack) {
 	  var obj = {};
+	  pairStack = pairStack || []; // 空数组用来判断是否有循环依赖，在逐层调用时，这个数组会把先后调用的 pair 放入其中
 	  _.each(this.kvPairs, function(pair) {
-	    var key = pair.getKey([]);  // 空数组用来判断是否有循环依赖，在逐层调用时，这个数组会把先后调用的 pair 放入其中
-	    var val = pair.getValue([]);
+	    // key 和 val 的 Stack 必须独立
+	    var key = pair.getKey([].concat(pairStack));
+	    var val = pair.getValue([].concat(pairStack));
 
 	    if (obj.hasOwnProperty(key)) { throw new Error('Object key "' + pair.key + '" duplicated.'); }
 
@@ -5673,15 +5686,15 @@
 	 * Licensed under the MIT license.
 	 */
 
-	var Caller = __webpack_require__(19);
-	var engine = __webpack_require__(20);
+	var Caller = __webpack_require__(18);
+	var engine = __webpack_require__(19);
 	var _ = __webpack_require__(13);
-	var exec = __webpack_require__(21);
+	var exec = __webpack_require__(20);
 
 	/**
 	 * 解析字符串中的 Caller 调用，如果是数组，则遍历数组中的字符串，如果是其它类型，则直接返回
 	 * @param {String|Array|*} any
-	 * @param {[KVPair]} pairStack
+	 * @param {Array<KVPair>} pairStack
 	 * @returns {*}
 	 */
 	function parse (any, pairStack) {
@@ -5689,8 +5702,9 @@
 	    return _.map(any, function(k) { return parse(k, [].concat(pairStack)); });
 	  }
 
+	  // 数组中有可能包含一个 Object，所以还要用下 any.getValue
+	  //if (!_.isString(any)) { return any && any.getValue ? any.getValue([].concat(pairStack)) : any; }
 	  if (!_.isString(any)) { return any; }
-
 
 	  var parsedStr = engine(any),
 	    tpl = parsedStr.tpl,
@@ -6006,143 +6020,11 @@
 	 * Copyright (c) 2015 Zhonglei Qiu
 	 * Licensed under the MIT license.
 	 */
-
 	var _ = __webpack_require__(13);
-	var parse = __webpack_require__(15);
-
-
-	/**
-	 * Object's key value pair
-	 *
-	 * @param {String} key
-	 * @param {*} value
-	 * @param {KVPairNode} node
-	 * @constructor
-	 */
-	function KVPair(key, value, node) {
-	  /**
-	   * Object's key, can depends on Self, Parent object.
-	   * @type {String}
-	   */
-	  this.key = key;
-
-	  /**
-	   * Object's value, can depends on Self, Parent object.
-	   * @type {*}
-	   */
-	  this.value = value;
-
-	  /**
-	   * If the value is a KVPairNode.
-	   * @type {Boolean}
-	   */
-	  this.hasChildPairs = value instanceof node.constructor;
-
-	  /**
-	   * Object's reference.
-	   *
-	   * @type {KVPairNode}
-	   */
-	  this.node = node;
-
-	  this.resolvedKey = null;
-	  this.resolvedValue = null;
-	}
-
-	/**
-	 * Pair to string
-	 *
-	 * @returns {String}
-	 */
-	KVPair.prototype.toString = function() {
-	  return 'KVPair{"key": "' + this.key + '", "value": "' + this.value + '"}';
-	};
-
-
-	/**
-	 * 判断 pair 是否是当前 pair 的 父级元素
-	 * @param {KVPair} pair
-	 * @returns {boolean}
-	 */
-	KVPair.prototype.isParentOf = function(pair) {
-	  var node = pair.node;
-	  if (this.hasChildPairs) {
-	    while (node) {
-	      if (node === this.value) {
-	        return true;
-	      }
-	      node = node.parent;
-	    }
-	  }
-	  return false;
-	};
-
-	/**
-	 * 循环依赖检查
-	 * @param {KVPair} current
-	 * @param {[KVPair]} stack
-	 * @private
-	 */
-	function _recycleCheck(current, stack) {
-	  var index = stack.indexOf(current);
-	  if (index >= 0) {
-	    var s = _.map(stack.slice(index).concat(current), function(it) { return it.toString(); });
-	    throw new Error('Recycle depends found. ' + s.join(' -> '));
-	  }
-	}
-
-
-	/**
-	 * Get the resolved key
-	 * @param {Array} stack
-	 * @returns {String}
-	 */
-	KVPair.prototype.getKey = function(stack) {
-	  _recycleCheck(this, stack);
-	  stack.push(this);
-	  if (this.resolvedKey === null) {
-	    this.resolvedKey = parse(this.key, stack);
-	  }
-	  return this.resolvedKey;
-	};
-
-	/**
-	 * Get the resolved value
-	 * @param {Array} stack
-	 * @returns {*}
-	 */
-	KVPair.prototype.getValue = function(stack) {
-	  _recycleCheck(this, stack);
-	  stack.push(this);
-	  if (this.resolvedValue === null) {
-	    if (this.hasChildPairs) {
-	      this.resolvedValue = this.value.getValue(); // 调用 node 的 getValue
-	    } else {
-	      this.resolvedValue = parse(this.value, stack);
-	    }
-	  }
-	  return this.resolvedValue;
-	};
-
-	module.exports = KVPair;
-
-
-/***/ },
-/* 19 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/*
-	 * yod
-	 * https://github.com/qiu8310/yod
-	 *
-	 * Copyright (c) 2015 Zhonglei Qiu
-	 * Licensed under the MIT license.
-	 */
-	var _ = __webpack_require__(13);
-	var jsonfy = __webpack_require__(23);
-	var tm = __webpack_require__(12);
-	var allConfig = __webpack_require__(10).all;
-	var exec = __webpack_require__(21);
+	var jsonfy = __webpack_require__(22);
+	var tm = __webpack_require__(7);
+	var allConfig = __webpack_require__(5).all;
+	var exec = __webpack_require__(20);
 
 	function Caller(series) {
 
@@ -6223,7 +6105,7 @@
 
 	/**
 	 * 先把它内部的子 Caller 解析了
-	 * @param {[KVPair]} pairStack
+	 * @param {Array<KVPair>} pairStack
 	 */
 	Caller.prototype.getValue = function(pairStack) {
 	  // 解析每个 Caller 中的参数的值
@@ -6288,7 +6170,7 @@
 
 
 /***/ },
-/* 20 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -6299,7 +6181,7 @@
 	 * Licensed under the MIT license.
 	 */
 
-	var scan = __webpack_require__(22);
+	var scan = __webpack_require__(23);
 
 	/**
 	 * 解析 "abc @Caller.filter.foo(are, ok) end" 类似字符中的 @Caller.filter.foo(are, ok)
@@ -6448,7 +6330,7 @@
 
 
 /***/ },
-/* 21 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -6483,7 +6365,383 @@
 
 
 /***/ },
+/* 21 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*
+	 * yod
+	 * https://github.com/qiu8310/yod
+	 *
+	 * Copyright (c) 2015 Zhonglei Qiu
+	 * Licensed under the MIT license.
+	 */
+
+	var _ = __webpack_require__(13);
+	var parse = __webpack_require__(15);
+
+
+	/**
+	 * Object's key value pair
+	 *
+	 * @param {String} key
+	 * @param {*} value
+	 * @param {KVPairNode} node
+	 * @constructor
+	 */
+	function KVPair(key, value, node) {
+	  /**
+	   * Object's key, can depends on Self, Parent object.
+	   * @type {String}
+	   */
+	  this.key = key;
+
+	  /**
+	   * Object's value, can depends on Self, Parent object.
+	   * @type {*}
+	   */
+	  this.value = value;
+
+	  /**
+	   * If the value is a KVPairNode.
+	   * @type {Boolean}
+	   */
+	  this.hasChildPairs = value instanceof node.constructor;
+
+	  /**
+	   * Object's reference.
+	   *
+	   * @type {KVPairNode}
+	   */
+	  this.node = node;
+
+	  this.resolvedKey = null;
+	  this.resolvedValue = null;
+	}
+
+	/**
+	 * Pair to string
+	 *
+	 * @returns {String}
+	 */
+	KVPair.prototype.toString = function() {
+	  return 'KVPair{"key": "' + this.key + '", "value": "' + this.value + '"}';
+	};
+
+
+	/**
+	 * 判断 pair 是否是当前 pair 的 父级元素
+	 * @param {KVPair} pair
+	 * @returns {boolean}
+	 */
+	KVPair.prototype.isParentOf = function(pair) {
+	  var node = pair.node;
+	  if (this.hasChildPairs) {
+	    while (node) {
+	      if (node === this.value) {
+	        return true;
+	      }
+	      node = node.parent;
+	    }
+	  }
+	  return false;
+	};
+
+	/**
+	 * 循环依赖检查
+	 * @param {KVPair} current
+	 * @param {Array<KVPair>} stack
+	 * @private
+	 */
+	function _recycleCheck(current, stack) {
+	  var index = stack.indexOf(current);
+	  if (index >= 0) {
+	    var s = _.map(stack.slice(index).concat(current), function(it) { return it.toString(); });
+	    throw new Error('Recycle depends found. ' + s.join(' -> '));
+	  }
+	}
+
+
+	/**
+	 * Get the resolved key
+	 * @param {Array} stack
+	 * @returns {String}
+	 */
+	KVPair.prototype.getKey = function(stack) {
+	  _recycleCheck(this, stack);
+	  stack.push(this);
+	  if (this.resolvedKey === null) {
+	    this.resolvedKey = parse(this.key, stack);
+	  }
+	  return this.resolvedKey;
+	};
+
+	/**
+	 * Get the resolved value
+	 * @param {Array} stack
+	 * @returns {*}
+	 */
+	KVPair.prototype.getValue = function(stack) {
+	  _recycleCheck(this, stack);
+	  stack.push(this);
+	  var val = this.value;
+
+	  if (this.resolvedValue === null) {
+	    if (this.hasChildPairs) {
+	      this.resolvedValue = val.getValue(); // 调用 node 的 getValue
+	    } else {
+	      if (_.isArray(val)) {
+	        this.resolvedValue = _.map(val, function(v) {
+	          return v && v.getValue ? v.getValue(stack) : parse(v, [].concat(stack));
+	        });
+	      } else {
+	        this.resolvedValue = parse(this.value, stack);
+	      }
+	    }
+	  }
+	  return this.resolvedValue;
+	};
+
+	module.exports = KVPair;
+
+
+/***/ },
 /* 22 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*
+	 * jsonfy
+	 * https://github.com/qiu8310/jsonfy"
+	 *
+	 * Copyright (c) 2015 Zhonglei Qiu
+	 * Licensed under the MIT license.
+	 */
+
+	var jsonfy = (function() {
+
+	  var at,     // The index of the current character
+	    ch,     // The current character
+	    endChars = ':,}]',
+	    words = {'true': true, 'false': false, 'null': null},
+	    trim = function(str) { return str.replace(/^\s+|\s+$/g, ''); },
+	    escapee = {
+	      '"': '"',
+	      '\\': '\\',
+	      '/': '/',
+	      b: '\b',
+	      f: '\f',
+	      n: '\n',
+	      r: '\r',
+	      t: '\t'
+	    },
+	    text,
+	    value,  // Place holder for the value function.
+
+	    isNumerical = function (str) {
+	      if (str.charAt(0) === '-') { str = str.substr(1); }
+
+	      if (/^(?:\d*\.)?\d+(?:[eE][-+]?\d*)?$/.test(str)) {
+	        // 0056, 00.56, 56.00 也会符合正则的
+	        if (str.indexOf('.') >= 0) {
+	          // 如果小数的第一位是0，则第二位一定要是 . ； 而如果第一位不是 0，则不管 . 在第几位都有效
+	          return (str.charAt(0) !== '0') || (str.charAt(1) === '.');
+	        } else {
+	          return str === '0' || str.charAt(0) !== '0';
+	        }
+	      }
+	      return false;
+	    },
+
+	    error = function (m) {
+	      // Call error when something is wrong.
+	      throw {
+	        name: 'SyntaxError',
+	        message: m,
+	        at: at,
+	        text: text
+	      };
+	    },
+
+	    next = function (c) {
+
+	      // If a c parameter is provided, verify that it matches the current character.
+
+	      if (c && c !== ch) {
+	        error('Expected "' + c + '" instead of "' + ch + '"');
+	      }
+
+	      // Get the next character. When there are no more characters,
+	      // return the empty string.
+
+	      ch = text.charAt(at);
+	      at += 1;
+	      return ch;
+	    },
+
+	    string = function() {
+	      var hex,
+	        i,
+	        string = '',
+	        start = ch === '"' || ch === '\'' ? ch : '',
+	        uffff;
+
+	      // When parsing for string values, we must look for " and \ characters.
+
+	      if (start) { next(start); }
+
+	      while (ch) {
+	        if (start && ch === start) {
+	          next();
+	          return string;
+	        } else if (!start && endChars.indexOf(ch) >= 0) {
+	          return trim(string);
+	        }
+
+	        if (ch === '\\') {
+	          next();
+	          if (ch === 'u') {
+	            uffff = 0;
+	            for (i = 0; i < 4; i += 1) {
+	              hex = parseInt(next(), 16);
+	              if (!isFinite(hex)) {
+	                break;
+	              }
+	              uffff = uffff * 16 + hex;
+	            }
+	            string += String.fromCharCode(uffff);
+	          } else if (typeof escapee[ch] === 'string') {
+	            string += escapee[ch];
+	          } else {
+	            break;
+	          }
+	        } else {
+	          string += ch;
+	        }
+	        next();
+	      }
+
+	      error('Bad string');
+	    },
+
+	  // 字面量，可以是字符串、数值，或 true, false, null
+	    literal = function() {
+	      var result = '';
+	      while (ch && endChars.indexOf(ch) < 0) {
+	        result += ch;
+	        next();
+	      }
+	      result = trim(result);
+	      if (words.hasOwnProperty(result)) { return words[result]; }
+	      if (isNumerical(result)) {
+	        return +result;
+	      }
+	      return result;
+	    },
+
+	    array = function() {
+	      var array = [];
+
+	      if (ch === '[') {
+	        next('[');
+	        white();
+	        if (ch === ']') {
+	          next(']');
+	          return array;   // empty array
+	        }
+	        while (ch) {
+	          array.push(value());
+	          white();
+	          if (ch === ']') {
+	            next(']');
+	            return array;
+	          }
+	          next(',');
+	          white();
+	        }
+	      }
+	      error('Bad array');
+	    },
+
+	    object = function() {
+	      var key,
+	        object = {};
+
+	      if (ch === '{') {
+	        next('{');
+	        white();
+	        if (ch === '}') {
+	          next('}');
+	          return object; // empty object
+	        }
+	        while (ch) {
+	          key = string();
+	          white();
+	          next(':');
+	          if (key === '') {
+	            error('Empty key');
+	          }
+	          if (Object.hasOwnProperty.call(object, key)) {
+	            error('Duplicate key "' + key + '"');
+	          }
+	          object[key] = value();
+	          white();
+	          if (ch === '}') {
+	            next('}');
+	            return object;
+	          }
+	          next(',');
+	          white();
+	        }
+	      }
+	      error('Bad object');
+	    },
+
+	    white = function() {
+	      // Skip whitespace.
+	      while (ch && ch <= ' ') { next(); }
+	    };
+
+	  value = function() {
+	    white();
+	    switch (ch) {
+	      case '{':
+	        return object();
+	      case '[':
+	        return array();
+	      case '"':
+	      case '\'':
+	        return string();
+	      default:
+	        return literal();
+	    }
+	  };
+
+	  return function (source) {
+
+	    var result;
+	    if (typeof source !== 'string') {
+	      error('Illegal input');
+	    }
+
+	    text = source;
+	    at = 0;
+	    ch = ' ';
+	    result = value();
+	    white();
+	    if (ch) {
+	      error('Syntax error');
+	    }
+
+	    return result;
+	  };
+	})();
+
+	if ( typeof module === 'object' && typeof module.exports === 'object' ) {
+	  module.exports = jsonfy;
+	}
+
+
+/***/ },
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -6863,242 +7121,6 @@
 	  module.exports = sscan;
 
 	})(this);
-
-
-/***/ },
-/* 23 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/*
-	 * jsonfy
-	 * https://github.com/qiu8310/jsonfy"
-	 *
-	 * Copyright (c) 2015 Zhonglei Qiu
-	 * Licensed under the MIT license.
-	 */
-
-	var jsonfy = (function() {
-
-	  var at,     // The index of the current character
-	    ch,     // The current character
-	    endChars = ':,}]',
-	    words = {'true': true, 'false': false, 'null': null},
-	    trim = function(str) { return str.replace(/^\s+|\s+$/g, ''); },
-	    escapee = {
-	      '"': '"',
-	      '\\': '\\',
-	      '/': '/',
-	      b: '\b',
-	      f: '\f',
-	      n: '\n',
-	      r: '\r',
-	      t: '\t'
-	    },
-	    text,
-	    value,  // Place holder for the value function.
-
-	    isNumerical = function (str) {
-	      if (str.charAt(0) === '-') { str = str.substr(1); }
-
-	      if (/^(?:\d*\.)?\d+(?:[eE][-+]?\d*)?$/.test(str)) {
-	        // 0056, 00.56, 56.00 也会符合正则的
-	        if (str.indexOf('.') >= 0) {
-	          // 如果小数的第一位是0，则第二位一定要是 . ； 而如果第一位不是 0，则不管 . 在第几位都有效
-	          return (str.charAt(0) !== '0') || (str.charAt(1) === '.');
-	        } else {
-	          return str === '0' || str.charAt(0) !== '0';
-	        }
-	      }
-	      return false;
-	    },
-
-	    error = function (m) {
-	      // Call error when something is wrong.
-	      throw {
-	        name: 'SyntaxError',
-	        message: m,
-	        at: at,
-	        text: text
-	      };
-	    },
-
-	    next = function (c) {
-
-	      // If a c parameter is provided, verify that it matches the current character.
-
-	      if (c && c !== ch) {
-	        error('Expected "' + c + '" instead of "' + ch + '"');
-	      }
-
-	      // Get the next character. When there are no more characters,
-	      // return the empty string.
-
-	      ch = text.charAt(at);
-	      at += 1;
-	      return ch;
-	    },
-
-	    string = function() {
-	      var hex,
-	        i,
-	        string = '',
-	        start = ch === '"' || ch === '\'' ? ch : '',
-	        uffff;
-
-	      // When parsing for string values, we must look for " and \ characters.
-
-	      if (start) { next(start); }
-
-	      while (ch) {
-	        if (start && ch === start) {
-	          next();
-	          return string;
-	        } else if (!start && endChars.indexOf(ch) >= 0) {
-	          return trim(string);
-	        }
-
-	        if (ch === '\\') {
-	          next();
-	          if (ch === 'u') {
-	            uffff = 0;
-	            for (i = 0; i < 4; i += 1) {
-	              hex = parseInt(next(), 16);
-	              if (!isFinite(hex)) {
-	                break;
-	              }
-	              uffff = uffff * 16 + hex;
-	            }
-	            string += String.fromCharCode(uffff);
-	          } else if (typeof escapee[ch] === 'string') {
-	            string += escapee[ch];
-	          } else {
-	            break;
-	          }
-	        } else {
-	          string += ch;
-	        }
-	        next();
-	      }
-
-	      error('Bad string');
-	    },
-
-	  // 字面量，可以是字符串、数值，或 true, false, null
-	    literal = function() {
-	      var result = '';
-	      while (ch && endChars.indexOf(ch) < 0) {
-	        result += ch;
-	        next();
-	      }
-	      result = trim(result);
-	      if (words.hasOwnProperty(result)) { return words[result]; }
-	      if (isNumerical(result)) {
-	        return +result;
-	      }
-	      return result;
-	    },
-
-	    array = function() {
-	      var array = [];
-
-	      if (ch === '[') {
-	        next('[');
-	        white();
-	        if (ch === ']') {
-	          next(']');
-	          return array;   // empty array
-	        }
-	        while (ch) {
-	          array.push(value());
-	          white();
-	          if (ch === ']') {
-	            next(']');
-	            return array;
-	          }
-	          next(',');
-	          white();
-	        }
-	      }
-	      error('Bad array');
-	    },
-
-	    object = function() {
-	      var key,
-	        object = {};
-
-	      if (ch === '{') {
-	        next('{');
-	        white();
-	        if (ch === '}') {
-	          next('}');
-	          return object; // empty object
-	        }
-	        while (ch) {
-	          key = string();
-	          white();
-	          next(':');
-	          if (key === '') {
-	            error('Empty key');
-	          }
-	          if (Object.hasOwnProperty.call(object, key)) {
-	            error('Duplicate key "' + key + '"');
-	          }
-	          object[key] = value();
-	          white();
-	          if (ch === '}') {
-	            next('}');
-	            return object;
-	          }
-	          next(',');
-	          white();
-	        }
-	      }
-	      error('Bad object');
-	    },
-
-	    white = function() {
-	      // Skip whitespace.
-	      while (ch && ch <= ' ') { next(); }
-	    };
-
-	  value = function() {
-	    white();
-	    switch (ch) {
-	      case '{':
-	        return object();
-	      case '[':
-	        return array();
-	      case '"':
-	      case '\'':
-	        return string();
-	      default:
-	        return literal();
-	    }
-	  };
-
-	  return function (source) {
-
-	    var result;
-	    if (typeof source !== 'string') {
-	      error('Illegal input');
-	    }
-
-	    text = source;
-	    at = 0;
-	    ch = ' ';
-	    result = value();
-	    white();
-	    if (ch) {
-	      error('Syntax error');
-	    }
-
-	    return result;
-	  };
-	})();
-
-	if ( typeof module === 'object' && typeof module.exports === 'object' ) {
-	  module.exports = jsonfy;
-	}
 
 
 /***/ }

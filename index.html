@@ -64,6 +64,7 @@ yod.type('User', {
   telephone: '@Tel',
   avatar: '@Avatar',
   others: {
+    objectInArray: [{a: '@Parent.Parent.age', b: '@Tel'}],
     getSystemConfig: '@Config.system.word.face.sample',
     words: 'Hello, my name is @Parent.fullName, you can call me @Parent.nickName.',
     bestFriends: '@Nick.repeat(2, 3).join(", ")' // Use native JS's `join` function
