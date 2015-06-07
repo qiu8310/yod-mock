@@ -250,6 +250,7 @@ yod('@String.replace(a, b)');  // equal to `yod('@String').replace('a', 'b')`
 - 发现已经有人写了服务器版本 [thx/RAP](https://github.com/thx/RAP)，值得学习下
 - 设计服务端时也可以参考 [https://readme.io/](https://readme.io/)
 - 国外有一个 [marak/Faker.js](https://github.com/marak/Faker.js/) 也和 mockjs、chance 类似，可以参考
+- 一个很不错的 JSON 服务端 [json-server](https://github.com/typicode/json-server)，__非常不错，值得学习下__
 
 ## History
 
