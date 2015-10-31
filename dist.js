@@ -791,7 +791,6 @@ yod.type('Image & Img & Picture & Pic', def(function() {
   return _.sys('picture', {category: this.category});
 }, {"rules":[["string",[["category","string","all"]],[[],[0]]]],"names":["Image","Img","Picture","Pic"]}));
 
-
 function _uriComponent(arg) { return encodeURIComponent(arg).replace(/%20/g, '+'); }
 function _holder(base, self) {
   var size = self.$get('size', '640x480'),
@@ -800,6 +799,8 @@ function _holder(base, self) {
 
   return base + size + '/' + colors + '&text=' + text;
 }
+
+
 
 yod.type('Dummy', def(function Dummy(self) {
   /**
@@ -850,6 +851,59 @@ yod.type('Placeimg & PlaceImg', def(function Placeimg() {
 
   return 'http://placeimg.com/' + size.replace('x', '/') + '/' + cate + (hue ? '/' + hue : '');
 }, {"defaults":{"categories":["animals","arch","nature","people","tech"],"hues":["sepia","grayscale"]},"rules":[["string",[["size","string"],["category","string"],["hue","string"]],[[],[0],[0,1],[0,1,2]]],["string",[["size","int"],["category","string"],["hue","string"]],[[0],[0,1],[0,1,2]]]],"names":["PlaceImg","Placeimg"]}));
+
+
+yod.type('Unsplash & UnSplash & Splash & U', def(function () {
+  /**
+   *
+   * Using [unsplash](https://unsplash.it/) to generate a random image
+   *
+   * Support arguments examples:
+   *
+   *  - 640
+   *  - 640x320
+   *  - 640/320
+   *  - gray
+   *  - blur
+   *  - west
+   *  - south
+   *  - east
+   *  - north
+   *  - center
+   *
+   * @rule ([* ...args]) -> string
+   *
+   */
+  var args = this.$get('args', []);
+  var size = '1920/800', grayscale = false, blur = false, gravity = false;
+
+  args.forEach(function (arg) {
+    arg = arg.toString();
+    if (/(\d+)(?:[\x\/](\d+))?/.test(arg)) {
+      size = RegExp.$1 + '/' + (RegExp.$2 || RegExp.$1);
+    } else if ('grayscale'.indexOf(arg) === 0) {
+      grayscale = true;
+    } else if ('blur'.indexOf(arg) === 0) {
+      blur = true;
+    } else {
+      ['north', 'east', 'south', 'west', 'center'].some(function (k) {
+        if (k.indexOf(arg) === 0) {
+          gravity = k;
+          return true;
+        }
+      });
+    }
+  });
+
+  return 'https://unsplash.it/' +
+    (grayscale ? 'g/' : '') +
+    size +
+    '/?random' +
+    (blur ? '&blur' : '') +
+    (gravity ? '&gravity=' + gravity : '');
+
+
+}, {"rules":[["string",[[1,"args","*"]],[[],[0]]]]}));
 
 
 

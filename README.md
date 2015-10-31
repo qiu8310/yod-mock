@@ -154,6 +154,7 @@ console.log(yod({
 * [Dummy](API_TYPES.md#dummy)
 * [PlaceHold & Placehold](API_TYPES.md#placehold--placehold)
 * [PlaceImg & Placeimg](API_TYPES.md#placeimg--placeimg)
+* [(anonymous)](API_TYPES.md#(anonymous))
 * [Audio & Mp3 & MP3](API_TYPES.md#audio--mp3--mp3)
 * [Video & Mp4 & MP4](API_TYPES.md#video--mp4--mp4)
 

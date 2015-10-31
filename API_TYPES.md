@@ -335,7 +335,7 @@ __Rules:__
 
 
 
-### [Dummy](src/mocks/media.js#L38-49)
+### [Dummy](src/mocks/media.js#L39-50)
 
 Using [http://dummyimage.com](http://dummyimage.com) to generate a random image
 
@@ -352,7 +352,7 @@ __Rules:__
 
 
 
-### [PlaceHold & Placehold](src/mocks/media.js#L51-65)
+### [PlaceHold & Placehold](src/mocks/media.js#L52-66)
 
 Using [http://placehold.it](http://placehold.it) to generate a random image
 
@@ -369,7 +369,7 @@ __Rules:__
 
 
 
-### [PlaceImg & Placeimg](src/mocks/media.js#L67-86)
+### [PlaceImg & Placeimg](src/mocks/media.js#L68-87)
 
 Using [http://placeimg.com](http://placeimg.com) to generate a random image
 
@@ -386,7 +386,32 @@ __Rules:__
 
 
 
-### [Audio & Mp3 & MP3](src/mocks/media.js#L91-106)
+### [(anonymous)](src/mocks/media.js#L90-140)
+
+Using [unsplash](https://unsplash.it/) to generate a random image
+
+Support arguments examples:
+
+ - 640
+ - 640x320
+ - 640/320
+ - gray
+ - blur
+ - west
+ - south
+ - east
+ - north
+ - center
+
+__Rules:__ 
+
+  - `() -> string`
+  - `(* ...args) -> string`
+
+
+
+
+### [Audio & Mp3 & MP3](src/mocks/media.js#L145-160)
 
 Generate a random audio url
 
@@ -400,7 +425,7 @@ __Rules:__
 
 
 
-### [Video & Mp4 & MP4](src/mocks/media.js#L111-127)
+### [Video & Mp4 & MP4](src/mocks/media.js#L165-181)
 
 Generate a random video url
 
