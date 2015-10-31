@@ -87,10 +87,14 @@ module.exports = function(yod, def, _) {
   }));
 
 
-  yod.type('Unsplash & UnSplash & Splash & U', def(function () {
+  yod.type('Unsplash & Splash & U', def(function () {
     /**
      *
      * Using [unsplash](https://unsplash.it/) to generate a random image
+     *
+     * @alias Unsplash
+     * @alias Splash
+     * @alias U
      *
      * Support arguments examples:
      *
@@ -112,29 +116,29 @@ module.exports = function(yod, def, _) {
     var size = '1920/800', grayscale = false, blur = false, gravity = false;
 
     args.forEach(function (arg) {
-        arg = arg.toString();
-        if (/(\d+)(?:[\x\/](\d+))?/.test(arg)) {
-            size = RegExp.$1 + '/' + (RegExp.$2 || RegExp.$1)
-        } else if ('grayscale'.indexOf(arg) === 0) {
-            grayscale = true;
-        } else if ('blur'.indexOf(arg) === 0) {
-            blur = true;
-        } else {
-            ['north', 'east', 'south', 'west', 'center'].some(function (k) {
-                if (k.indexOf(arg) === 0) {
-                    gravity = k;
-                    return true;
-                }
-            });
-        }
+      arg = arg.toString();
+      if (/(\d+)(?:[\x\/](\d+))?/.test(arg)) {
+        size = RegExp.$1 + '/' + (RegExp.$2 || RegExp.$1);
+      } else if ('grayscale'.indexOf(arg) === 0) {
+        grayscale = true;
+      } else if ('blur'.indexOf(arg) === 0) {
+        blur = true;
+      } else {
+        ['north', 'east', 'south', 'west', 'center'].some(function (k) {
+          if (k.indexOf(arg) === 0) {
+            gravity = k;
+            return true;
+          }
+        });
+      }
     });
 
-    return 'https://unsplash.it/'
-        + (grayscale ? 'g/' : '')
-        + size
-        + '/?random'
-        + (blur ? '&blur' : '')
-        + (gravity ? '&gravity=' + gravity : '');
+    return 'https://unsplash.it/' +
+      (grayscale ? 'g/' : '') +
+      size +
+      '/?random' +
+      (blur ? '&blur' : '') +
+      (gravity ? '&gravity=' + gravity : '');
 
 
   }));

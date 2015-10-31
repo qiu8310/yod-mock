@@ -1,4 +1,14 @@
 
+0.3.1 / 2015-10-31
+==================
+
+  * 添加新类型 Unsplash/Splash/U
+  * add loopback to todo list
+  * add Netflix/falcor to README
+  * 添加 apiary.io
+  * 添加 json-server
+  * 核心模块 yod 更新了支持在数组中写对象，这里只更新浏览器版本
+
 0.3.0 / 2015-05-15
 ==================
 
