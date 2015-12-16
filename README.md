@@ -250,6 +250,7 @@ yod('@String.replace(a, b)');  // equal to `yod('@String').replace('a', 'b')`
 - 设计服务端时也可以参考 [https://readme.io/](https://readme.io/) 和 [http://apiary.io/](http://apiary.io/) 和 [Netflix/falcor](https://github.com/Netflix/falcor) 和 [http://loopback.io/getting-started/](http://loopback.io/getting-started/)
 - 国外有一个 [marak/Faker.js](https://github.com/marak/Faker.js/) 也和 mockjs、chance 类似，可以参考
 - 一个很不错的 JSON 服务端 [json-server](https://github.com/typicode/json-server)，__非常不错，值得学习下__
+- 美团分享的关于 Mock Server 的技术文章 [Mock Server in Action](http://tech.meituan.com/mock-server-in-action.html)
 
 ## History
 
