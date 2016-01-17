@@ -13,7 +13,8 @@ if (args.indexOf('-c') >= 0) {
 
 if (!args.length) {
   console.log('\r\n  Usage:');
-  console.log('\r\n  yod [-c] generator\r\n\r\n');
+  console.log('\r\n  yod [-c] generator\r\n');
+  console.log(Object.keys(yod.types).join('\t'), '\r\n');
 } else {
 
   caller = args.shift();
