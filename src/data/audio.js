@@ -2,13 +2,13 @@ module.exports = {
   short: 'http://liulishuo-dream.qiniudn.com/{{range:1-20}}.mp3',
   music: 'http://liulishuo-dream.qiniudn.com/{{range:111-130}}.mp3',
   long: [
-    'http://llss.qiniudn.com/crm_1428914686442.mp3',
-    'http://llss.qiniudn.com/crm_1428979057152.mp3',
-    'http://llss.qiniudn.com/crm_1428558020796.mp3',
-    'http://llss.qiniudn.com/crm_1428549322829.mp3',
-    'http://llss.qiniudn.com/crm_1428581603064.mp3',
-    'http://llss.qiniudn.com/crm_1428585991827.mp3',
-    'http://llss.qiniudn.com/crm_1428558300767.mp3'
+    'http://cdn.llsapp.com/crm_1428914686442.mp3',
+    'http://cdn.llsapp.com/crm_1428979057152.mp3',
+    'http://cdn.llsapp.com/crm_1428558020796.mp3',
+    'http://cdn.llsapp.com/crm_1428549322829.mp3',
+    'http://cdn.llsapp.com/crm_1428581603064.mp3',
+    'http://cdn.llsapp.com/crm_1428585991827.mp3',
+    'http://cdn.llsapp.com/crm_1428558300767.mp3'
   ],
   voice: [
     'http://cdn.llsapp.com/forum/audio/OTZjMWQwMDAwMDBiMWE1Yg==_1429875109_16k_128k.m4a',
